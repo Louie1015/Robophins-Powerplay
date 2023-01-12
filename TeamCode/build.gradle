@@ -24,5 +24,5 @@ dependencies {
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 }
 dependencies {
-    implementation 'org.openftc:easyopencv:1.3.2'
+    implementation 'org.openftc:easyopencv:1.5.3'
 }

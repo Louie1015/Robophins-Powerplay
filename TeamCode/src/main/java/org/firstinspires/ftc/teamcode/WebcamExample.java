@@ -38,11 +38,13 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @TeleOp
 public class WebcamExample extends LinearOpMode
 {
+    //Ppbot robot = new Ppbot();
     OpenCvWebcam webcam;
 
     @Override
     public void runOpMode()
     {
+        //robot.init(hardwareMap);
         /*
          * Instantiate an OpenCvCamera object for the camera we'll be using.
          * In this sample, we're using a webcam. Note that you will need to

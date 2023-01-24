@@ -3,34 +3,44 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-//import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 @Autonomous(name = "Signal Sleeve Test")
 public class VisionTest extends LinearOpMode {
 
     private SleeveDetection sleeveDetection;
-    private OpenCvCamera camera;
+
+    OpenCvWebcam webcam;
 
     // Name of the Webcam to be set in the config
     private String webcamName = "Webcam 1";
 
     @Override
     public void runOpMode() throws InterruptedException {
+        // NEXT TWO LINES COULD BE JANK
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        
         sleeveDetection = new SleeveDetection();
-        camera.setPipeline(sleeveDetection);
+        webcam.setPipeline(sleeveDetection);
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                webcam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
 
             @Override

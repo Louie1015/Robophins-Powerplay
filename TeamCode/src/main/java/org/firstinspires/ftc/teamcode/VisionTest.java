@@ -28,10 +28,12 @@ public class VisionTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // NEXT TWO LINES COULD BE JANK
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //this line COULD be jank, shouldn't be
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        
+        //this is what it used to be:
+        //camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
         sleeveDetection = new SleeveDetection();
         webcam.setPipeline(sleeveDetection);
 

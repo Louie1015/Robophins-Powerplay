@@ -31,9 +31,9 @@ class Ppbot{
         Slider = maps.dcMotor.get("slider");
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        BRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        FLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        FRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        BRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        FLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        FRight.setDirection(DcMotorSimple.Direction.REVERSE);
         Slider.setDirection(DcMotorSimple.Direction.FORWARD);
 
         BLeft.setPower(0.0);

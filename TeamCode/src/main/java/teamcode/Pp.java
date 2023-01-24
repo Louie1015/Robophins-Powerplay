@@ -31,9 +31,9 @@ class Ppbot{
         Slider = maps.dcMotor.get("slider");
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        BRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        FLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        FRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        BRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        FLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        FRight.setDirection(DcMotorSimple.Direction.REVERSE);
         Slider.setDirection(DcMotorSimple.Direction.FORWARD);
 
         BLeft.setPower(0.0);
@@ -43,17 +43,17 @@ class Ppbot{
         Slider.setPower(0.0);
         Slider.setPower(0.0);
 
-        BLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
 
 @TeleOp (name = "PowerPlaybot", group = "pp")
 
-public class Pp extends LinearOpMode {
+public class Pp extends LinearOpMode{
     Ppbot robot = new Ppbot();
     double x;
     double y;
@@ -71,7 +71,7 @@ public class Pp extends LinearOpMode {
 
     @Override
 
-    public void runOpMode() {
+    public void runOpMode(){
         robot.init(hardwareMap);
         telemetry.addData("Say", "Hello");
         telemetry.update();
@@ -79,7 +79,7 @@ public class Pp extends LinearOpMode {
         waitForStart();
 
         //while we balling
-        while (opModeIsActive()) {
+        while(opModeIsActive()){
             // y = forward/back x = left strafe/right strafe, rx = rotation
             y = -gamepad1.left_stick_y;
             x = gamepad1.left_stick_x;
@@ -95,14 +95,14 @@ public class Pp extends LinearOpMode {
                 x = -0.3;
             if (gamepad1.dpad_right)
                 x = 0.3;
-            if (Math.abs(rx) > 0.03) {
+            if (Math.abs(rx) > 0.03){
                 robot.BLeft.setPower(rotationScalar * -rx);
                 robot.BRight.setPower(rotationScalar * -rx);
                 robot.FLeft.setPower(rotationScalar * rx);
                 robot.FRight.setPower(rotationScalar * -rx);
             }
             // if we want to go foward/back do a little motor powering
-            else if (Math.abs(y) >= Math.abs(x) && Math.abs(y) > 0.03) {
+            else if (Math.abs(y) >= Math.abs(x) && Math.abs(y) > 0.03){
                 robot.BLeft.setPower(speedScalar * -y * 0.7); //-
                 robot.BRight.setPower(speedScalar * y * 0.7);
                 robot.FLeft.setPower(speedScalar * y * 0.85); //-
@@ -110,7 +110,7 @@ public class Pp extends LinearOpMode {
 
             }
             //if we want to go strafing, set a little moter powerfing for strafing
-            else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03) {
+            else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03){
                 robot.BLeft.setPower(speedScalar * x * 0.7);
                 robot.BRight.setPower(speedScalar * x * 0.7);
                 robot.FLeft.setPower(speedScalar * x * 0.85);
@@ -151,17 +151,17 @@ public class Pp extends LinearOpMode {
             robot.Slider.setPower(Slidepos);
 
 
+
             //telemetry :nerd_emoji:
-            telemetry.addData("x", "%.2f", x);
-            telemetry.addData("y", "%.2f", y);
-            telemetry.addData("servo1", "%.2f", robot.Take1.getPosition());
-            telemetry.addData("servo2", "%.2f", robot.Take2.getPosition()); // REMEMBER TO CONFIGURE THIS ON PHONE
+            telemetry.addData("x","%.2f", x);
+            telemetry.addData("y","%.2f", y);
+            telemetry.addData("servo1","%.2f", robot.Take1.getPosition());
+            telemetry.addData("servo2","%.2f", robot.Take2.getPosition()); // REMEMBER TO CONFIGURE THIS ON PHONE
             telemetry.update();
 
             sleep(50);
         }
     }
-
     public void moveRight() {
         x = 0.3;
     }
@@ -177,4 +177,5 @@ public class Pp extends LinearOpMode {
     public void moveBackward() {
         y = -0.2;
     }
+
 }

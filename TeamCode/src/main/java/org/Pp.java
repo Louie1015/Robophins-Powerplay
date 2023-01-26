@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,6 +16,7 @@ class Ppbot{
     public DcMotor FLeft = null;
     public DcMotor FRight = null;
     public DcMotor Slider = null;
+    public DcMotor Hslide = null;
     public Servo Take1 = null;
     public Servo Take2 = null;
 
@@ -26,6 +27,7 @@ class Ppbot{
         BRight = maps.dcMotor.get("br");
         FLeft = maps.dcMotor.get("fl");
         FRight = maps.dcMotor.get("fr");
+        Hslide = maps.dcMotor.get("hs");
         Take1 = maps.servo.get("grabber");
         Take2 = maps.servo.get("grabber2");
         Slider = maps.dcMotor.get("slider");
@@ -34,6 +36,7 @@ class Ppbot{
         BRight.setDirection(DcMotorSimple.Direction.REVERSE);
         FLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         FRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        Hslide.setDirection(DcMotorSimple.Direction.FORWARD);
         Slider.setDirection(DcMotorSimple.Direction.FORWARD);
 
         BLeft.setPower(0.0);
@@ -42,12 +45,14 @@ class Ppbot{
         FRight.setPower(0.0);
         Slider.setPower(0.0);
         Slider.setPower(0.0);
+        Hslide.setPower(0.0);
 
-        BLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Hslide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
 
@@ -59,8 +64,10 @@ public class Pp extends LinearOpMode{
     double y;
     double rx;
     double Slidepos = 0.0;
+    double Hpos = 0.0;
     final double Armspeed = 0.1;
     final double Slidespeed = 1.0;
+    final double Hspeed = 1.0;
     final double rotationScalar = 0.5;
     final double speedScalar = 0.8;
     double drivespeed = 0.2;
@@ -125,13 +132,18 @@ public class Pp extends LinearOpMode{
             //uppy downy. <- NOT DOWNY madge
             // this stuff needs changing i think
             // maybe add stopper
+            Hpos = 0.0;
+            if (gamepad1.y)
+                Hpos += Hspeed / 2;
+            else if (gamepad1.a)
+                Hpos -= Hspeed / 2;
             Slidepos = 0.0;
-            if (Math.abs(gamepad1.right_trigger) > 0.0) // uppy
+            if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy
                 Slidepos += Slidespeed;
-            if (gamepad1.right_bumper) { // stopper
+            if (gamepad1.right_bumper || gamepad2.right_bumper) { // stopper
                 Slidepos += Slidespeed / 8;
             }
-            if (Math.abs(gamepad1.left_trigger) > 0.0) {
+            if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {
                 Slidepos -= Slidespeed / 4;
             }
             //open close :)
@@ -149,6 +161,7 @@ public class Pp extends LinearOpMode{
             }
             //set power and position for grabby and shit
             robot.Slider.setPower(Slidepos);
+            robot.Hslide.setPower(Hpos);
 
 
 

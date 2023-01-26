@@ -82,41 +82,41 @@ public class VisionTest extends LinearOpMode {
 
     public void Path1(){
         moveLeft();
-        sleep(3500);
+        sleep(2600);
         stopDrivebase();
         sleep(500);
         moveForward();
-        sleep(3500);
+        sleep(1500);
         stopDrivebase();
     }
 
     public void Path2(){
-        moveLeft();
-        sleep(3500);
+        moveRight();
+        sleep(2700);
         stopDrivebase();
         sleep(500);
         moveForward();
-        sleep(7000);
+        sleep(2900);
         stopDrivebase();
         sleep(500);
-        moveRight();
-        sleep(3500);
+        moveLeft();
+        sleep(2600);
         stopDrivebase();
     }
 
     public void Path3(){
         moveRight();
-        sleep(3500);
+        sleep(2700);
         stopDrivebase();
         sleep(500);
         moveForward();
-        sleep(3500);
+        sleep(1600);
         stopDrivebase();
     }
     public void moveLeft() {
         robot.FLeft.setPower(pwr);
         robot.FRight.setPower(-pwr);
-        robot.BLeft.setPower(-pwr);
+        robot.BLeft.setPower(-pwr*1.35);
         robot.BRight.setPower(pwr);
     }
 
@@ -124,12 +124,12 @@ public class VisionTest extends LinearOpMode {
         robot.FLeft.setPower(-pwr);
         robot.FRight.setPower(pwr);
         robot.BLeft.setPower(pwr);
-        robot.BRight.setPower(-pwr);
+        robot.BRight.setPower(-pwr*1.4);
     }
 
     public void moveForward() {
         robot.FLeft.setPower(-pwr);
-        robot.FRight.setPower(-pwr);
+        robot.FRight.setPower(-pwr*1.3);
         robot.BLeft.setPower(-pwr);
         robot.BRight.setPower(-pwr);
     }

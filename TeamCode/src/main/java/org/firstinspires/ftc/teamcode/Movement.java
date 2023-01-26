@@ -4,11 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.openftc.easyopencv.OpenCvCamera;
+
 
 @Autonomous(name = "PowerPlayCV", group = "ppcv")
 public class Movement extends LinearOpMode {
 
-    DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight;
+    private SleeveDetection sleeveDetection;
+    private OpenCvCamera camera;
+    private String webcamName = "Webcam 1";
+    //DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight;
     Ppbot robot = new Ppbot();
     final double speedScalar = 0.8;
     Movement vision = new Movement();
@@ -24,26 +29,30 @@ public class Movement extends LinearOpMode {
         telemetry.addData("Say", "Hello");
         telemetry.update();
 
-        waitForStart();
-        while(opModeIsActive()){
+        while(opModeIsActive()) {
 
-            if(SleeveDetection.truePath == 1){
+          /*  if(SleeveDetection.truePath == 1){
                 state1 = 1;
+                //break;
             }else if(SleeveDetection.truePath == 2){
                 state2 = 1;
+                //break;
             }else if(SleeveDetection.truePath == 3){
                 state3 = 1;
+                //break;
             }
 
 
             if(state1 == 1){
                 Path1();
-            }else if(state2 == 2){
+            }else if(state2 == 1){
                 Path2();
-            }else if(state3 == 3){
+            }else if(state3 == 1){
                 Path3();
             }
+        */
         }
+            waitForStart();
 
     }
 
@@ -82,61 +91,52 @@ public class Movement extends LinearOpMode {
     }
 
     public void moveRight() {
-        motorFrontLeft.setPower(0.15);
-        motorFrontRight.setPower(-0.15);
-        motorBackLeft.setPower(-0.15);
-        motorBackRight.setPower(0.15);
+        robot.FLeft.setPower(0.15);
+        robot.FRight.setPower(-0.15);
+        robot.BLeft.setPower(-0.15);
+        robot.BRight.setPower(0.15);
     }
 
     public void moveLeft() {
-        motorFrontLeft.setPower(-pwr);
-        motorFrontRight.setPower(pwr);
-        motorBackLeft.setPower(pwr);
-        motorBackRight.setPower(-pwr);
+        robot.FLeft.setPower(-pwr);
+        robot.FRight.setPower(pwr);
+        robot.BLeft.setPower(pwr);
+        robot.BRight.setPower(-pwr);
     }
 
     public void moveForward() {
-        motorFrontLeft.setPower(pwr);
-        motorFrontRight.setPower(-pwr);
-        motorBackLeft.setPower(-pwr);
-        motorBackRight.setPower(pwr);
+        robot.FLeft.setPower(pwr);
+        robot.FRight.setPower(-pwr);
+        robot.BLeft.setPower(-pwr);
+        robot.BRight.setPower(pwr);
     }
 
     public void moveBackward() {
-        motorFrontLeft.setPower(-pwr);
-        motorFrontRight.setPower(-pwr);
-        motorBackLeft.setPower(-pwr);
-        motorBackRight.setPower(-pwr);
+        robot.FLeft.setPower(-pwr);
+        robot.FRight.setPower(-pwr);
+        robot.BLeft.setPower(-pwr);
+        robot.BRight.setPower(-pwr);
     }
 
     public void stopDrivebase() {
-        motorFrontLeft.setPower(0);
-        motorFrontRight.setPower(0);
-        motorBackLeft.setPower(0);
-        motorBackRight.setPower(0);
+        robot.FLeft.setPower(0);
+        robot.FRight.setPower(0);
+        robot.BLeft.setPower(0);
+        robot.BRight.setPower(0);
     }
 
     public void turnRight() {
-        motorFrontLeft.setPower(pwr);
-        motorFrontRight.setPower(-pwr);
-        motorBackLeft.setPower(pwr);
-        motorBackRight.setPower(-pwr);
+        robot.FLeft.setPower(pwr);
+        robot.FRight.setPower(-pwr);
+        robot.BLeft.setPower(pwr);
+        robot.BRight.setPower(-pwr);
     }
 
     public void turnLeft() {
-        motorFrontLeft.setPower(-pwr);
-        motorFrontRight.setPower(pwr);
-        motorBackLeft.setPower(-pwr);
-        motorBackRight.setPower(pwr);
-    }
-
-    public void P1() {
-    }
-
-    public void P2() {
-    }
-
-    public void P3() {
+        robot.FLeft.setPower(-pwr);
+        robot.FRight.setPower(pwr);
+        robot.BLeft.setPower(-pwr);
+        robot.BRight.setPower(pwr);
     }
 
 }

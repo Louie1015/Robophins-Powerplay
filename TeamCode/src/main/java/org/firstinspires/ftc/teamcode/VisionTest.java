@@ -2,35 +2,46 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-//import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+
 @Autonomous(name = "Signal Sleeve Test")
 public class VisionTest extends LinearOpMode {
 
+
     private SleeveDetection sleeveDetection;
-    private OpenCvCamera camera;
+
+
+    OpenCvCamera webcam;
 
     // Name of the Webcam to be set in the config
     private String webcamName = "Webcam 1";
+    //imports a new robot into the file
+    Ppbot robot = new Ppbot();
+    //motor power constant in our code
+    double pwr = 0.25;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot.init(hardwareMap);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
+        //this line COULD be jank, shouldn't be
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        //this is what it used to be:
+        //camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
         sleeveDetection = new SleeveDetection();
-        camera.setPipeline(sleeveDetection);
+        webcam.setPipeline(sleeveDetection);
+       //webcam.setMillisecondsPermissionTimeout(5000);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                webcam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
 
             @Override
@@ -38,12 +49,116 @@ public class VisionTest extends LinearOpMode {
 
             }
         });
+        waitForStart();
+        while(opModeIsActive()) {
+
+            if(SleeveDetection.truePath == 1){
+                Path1();
+                telemetry.addData("P1: ", sleeveDetection.getPosition());
+                telemetry.update();
+                break;
+            }else if(SleeveDetection.truePath == 2){
+                Path2();
+                telemetry.addData("P2: ", sleeveDetection.getPosition());
+                telemetry.update();
+                break;
+            }else if(SleeveDetection.truePath == 3){
+                Path3();
+                telemetry.addData("P3: ", sleeveDetection.getPosition());
+                telemetry.update();
+                break;
+            }
+
+
+        }
+
 
         while (!isStarted()) {
             telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             telemetry.update();
         }
 
-        waitForStart();
+    }
+
+    public void Path1(){
+        moveLeft();
+        sleep(3500);
+        stopDrivebase();
+        sleep(500);
+        moveForward();
+        sleep(3500);
+        stopDrivebase();
+    }
+
+    public void Path2(){
+        moveLeft();
+        sleep(3500);
+        stopDrivebase();
+        sleep(500);
+        moveForward();
+        sleep(7000);
+        stopDrivebase();
+        sleep(500);
+        moveRight();
+        sleep(3500);
+        stopDrivebase();
+    }
+
+    public void Path3(){
+        moveRight();
+        sleep(3500);
+        stopDrivebase();
+        sleep(500);
+        moveForward();
+        sleep(3500);
+        stopDrivebase();
+    }
+    public void moveLeft() {
+        robot.FLeft.setPower(pwr);
+        robot.FRight.setPower(-pwr);
+        robot.BLeft.setPower(-pwr);
+        robot.BRight.setPower(pwr);
+    }
+
+    public void moveRight() {
+        robot.FLeft.setPower(-pwr);
+        robot.FRight.setPower(pwr);
+        robot.BLeft.setPower(pwr);
+        robot.BRight.setPower(-pwr);
+    }
+
+    public void moveForward() {
+        robot.FLeft.setPower(-pwr);
+        robot.FRight.setPower(-pwr);
+        robot.BLeft.setPower(-pwr);
+        robot.BRight.setPower(-pwr);
+    }
+
+    public void moveBackward() {
+        robot.FLeft.setPower(pwr);
+        robot.FRight.setPower(pwr);
+        robot.BLeft.setPower(pwr);
+        robot.BRight.setPower(pwr);
+    }
+
+    public void stopDrivebase() {
+        robot.FLeft.setPower(0);
+        robot.FRight.setPower(0);
+        robot.BLeft.setPower(0);
+        robot.BRight.setPower(0);
+    }
+
+    public void turnLeft() {
+        robot.FLeft.setPower(pwr);
+        robot.FRight.setPower(-pwr);
+        robot.BLeft.setPower(pwr);
+        robot.BRight.setPower(-pwr);
+    }
+
+    public void turnRight() {
+        robot.FLeft.setPower(-pwr);
+        robot.FRight.setPower(pwr);
+        robot.BLeft.setPower(-pwr);
+        robot.BRight.setPower(pwr);
     }
 }

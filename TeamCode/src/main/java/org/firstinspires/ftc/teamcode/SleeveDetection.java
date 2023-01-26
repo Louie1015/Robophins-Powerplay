@@ -19,7 +19,9 @@ public class SleeveDetection extends OpenCvPipeline {
     public enum ParkingPosition {
         LEFT,
         CENTER,
-        RIGHT
+        RIGHT,
+
+        WAIT
     }
 
     // TOPLEFT anchor point for the bounding box
@@ -78,7 +80,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     MAGENTA,
                     2
             );
-        } else {
+        } else if (sumColors.val[2] == minColor) {
             position = ParkingPosition.LEFT;
             truePath = 1;
             Imgproc.rectangle(

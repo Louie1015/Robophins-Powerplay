@@ -134,9 +134,9 @@ public class Pp extends LinearOpMode{
             // maybe add stopper
             Hpos = 0.0;
             if (gamepad1.y)
-                Hpos += Hspeed / 2;
+                Hpos += Hspeed;
             else if (gamepad1.a)
-                Hpos -= Hspeed / 2;
+                Hpos -= Hspeed ;
             Slidepos = 0.0;
             if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy
                 Slidepos += Slidespeed;

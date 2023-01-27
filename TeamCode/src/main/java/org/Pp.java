@@ -118,8 +118,8 @@ public class Pp extends LinearOpMode{
             }
             //if we want to go strafing, set a little moter powerfing for strafing
             else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03){
-                robot.BLeft.setPower(speedScalar * x * 0.7);
-                robot.BRight.setPower(speedScalar * x * 0.7);
+                robot.BLeft.setPower(speedScalar * x * 0.7 *1.4 /* the 1.4 is for post-new drivebase, for refrence later*/);
+                robot.BRight.setPower(speedScalar * x * 0.7*1.4);
                 robot.FLeft.setPower(speedScalar * x * 0.85);
                 robot.FRight.setPower(speedScalar * -x);
                 //if we dont want to move make sure we dont move
@@ -134,9 +134,9 @@ public class Pp extends LinearOpMode{
             // maybe add stopper
             Hpos = 0.0;
             if (gamepad1.y)
-                Hpos += Hspeed / 2;
+                Hpos += Hspeed;
             else if (gamepad1.a)
-                Hpos -= Hspeed / 2;
+                Hpos -= Hspeed ;
             Slidepos = 0.0;
             if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy
                 Slidepos += Slidespeed;

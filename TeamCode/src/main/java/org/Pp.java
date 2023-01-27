@@ -47,12 +47,12 @@ class Ppbot{
         Slider.setPower(0.0);
         Hslide.setPower(0.0);
 
-        BLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Hslide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Hslide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
 

@@ -118,8 +118,8 @@ public class Pp extends LinearOpMode{
             }
             //if we want to go strafing, set a little moter powerfing for strafing
             else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03){
-                robot.BLeft.setPower(speedScalar * x * 0.7);
-                robot.BRight.setPower(speedScalar * x * 0.7);
+                robot.BLeft.setPower(speedScalar * x * 0.7 *1.4 /* the 1.4 is for post-new drivebase, for refrence later*/);
+                robot.BRight.setPower(speedScalar * x * 0.7*1.4);
                 robot.FLeft.setPower(speedScalar * x * 0.85);
                 robot.FRight.setPower(speedScalar * -x);
                 //if we dont want to move make sure we dont move

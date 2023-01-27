@@ -1,164 +1,104 @@
-package teamcode.AutonCV;
+package teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvPipeline;
 
+public class SleeveDetection extends OpenCvPipeline {
+    /*
+    YELLOW  = Parking Left
+    CYAN    = Parking Middle
+    MAGENTA = Parking Right
+     */
 
-@Autonomous(name = "Signal Sleeve Test")
-public class VisionTest extends LinearOpMode {
+    public enum ParkingPosition {
+        LEFT,
+        CENTER,
+        RIGHT,
 
+        WAIT
+    }
 
-    private SleeveDetection sleeveDetection;
+    // TOPLEFT anchor point for the bounding box
+    private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
 
+    // Width and height for the bounding box
+    public static int REGION_WIDTH = 30;
+    public static int REGION_HEIGHT = 50;
 
-    OpenCvCamera webcam;
+    public static int truePath = 0;
 
-    // Name of the Webcam to be set in the config
-    private String webcamName = "Webcam 1";
-    //imports a new robot into the file
-    Ppbot robot = new Ppbot();
-    //motor power constant in our code
-    double pwr = 0.25;
+    // Color definitions
+    private final Scalar
+            YELLOW  = new Scalar(255, 255, 0),
+            CYAN    = new Scalar(0, 255, 255),
+            MAGENTA = new Scalar(255, 0, 255);
+
+    // Anchor point definitions
+    Point sleeve_pointA = new Point(
+            SLEEVE_TOPLEFT_ANCHOR_POINT.x,
+            SLEEVE_TOPLEFT_ANCHOR_POINT.y);
+    Point sleeve_pointB = new Point(
+            SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+            SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+
+    // Running variable storing the parking position
+    private volatile ParkingPosition position = ParkingPosition.LEFT;
 
     @Override
-    public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        //this line COULD be jank, shouldn't be
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        //this is what it used to be:
-        //camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection();
-        webcam.setPipeline(sleeveDetection);
-        //webcam.setMillisecondsPermissionTimeout(5000);
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+    public Mat processFrame(Mat input) {
+        // Get the submat frame, and then sum all the values
+        Mat areaMat = input.submat(new Rect(sleeve_pointA, sleeve_pointB));
+        Scalar sumColors = Core.sumElems(areaMat);
 
-        {
-            @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
-            }
+        // Get the minimum RGB value from every single channel
+        double minColor = Math.min(sumColors.val[0], Math.min(sumColors.val[1], sumColors.val[2]));
 
-            @Override
-            public void onError(int errorCode) {
-
-            }
-        });
-        waitForStart();
-        while(opModeIsActive()) {
-
-            if(SleeveDetection.truePath == 1){
-                Path1();
-                telemetry.addData("P1: ", sleeveDetection.getPosition());
-                telemetry.update();
-                break;
-            }else if(SleeveDetection.truePath == 2){
-                Path2();
-                telemetry.addData("P2: ", sleeveDetection.getPosition());
-                telemetry.update();
-                break;
-            }else if(SleeveDetection.truePath == 3){
-                Path3();
-                telemetry.addData("P3: ", sleeveDetection.getPosition());
-                telemetry.update();
-                break;
-            }
-
-
+        // Change the bounding box color based on the sleeve color
+        if (sumColors.val[0] == minColor) {
+            position = ParkingPosition.CENTER;
+            truePath = 2;
+            Imgproc.rectangle(
+                    input,
+                    sleeve_pointA,
+                    sleeve_pointB,
+                    CYAN,
+                    2
+            );
+        } else if (sumColors.val[1] == minColor) {
+            position = ParkingPosition.RIGHT;
+            truePath = 3;
+            Imgproc.rectangle(
+                    input,
+                    sleeve_pointA,
+                    sleeve_pointB,
+                    MAGENTA,
+                    2
+            );
+        } else if (sumColors.val[2] == minColor) {
+            position = ParkingPosition.LEFT;
+            truePath = 1;
+            Imgproc.rectangle(
+                    input,
+                    sleeve_pointA,
+                    sleeve_pointB,
+                    YELLOW,
+                    2
+            );
         }
 
-
-        while (!isStarted()) {
-            telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
-            telemetry.update();
-        }
-
+        // Release and return input
+        areaMat.release();
+        return input;
     }
 
-    public void Path1(){
-        moveLeft();
-        sleep(2600);
-        stopDrivebase();
-        sleep(500);
-        moveForward();
-        sleep(1500);
-        stopDrivebase();
-    }
-
-    public void Path2(){
-        moveRight();
-        sleep(2700);
-        stopDrivebase();
-        sleep(500);
-        moveForward();
-        sleep(2900);
-        stopDrivebase();
-        sleep(500);
-        moveLeft();
-        sleep(2600);
-        stopDrivebase();
-    }
-
-    public void Path3(){
-        moveRight();
-        sleep(2700);
-        stopDrivebase();
-        sleep(500);
-        moveForward();
-        sleep(1600);
-        stopDrivebase();
-    }
-    public void moveLeft() {
-        robot.FLeft.setPower(pwr);
-        robot.FRight.setPower(-pwr);
-        robot.BLeft.setPower(-pwr*1.35);
-        robot.BRight.setPower(pwr);
-    }
-
-    public void moveRight() {
-        robot.FLeft.setPower(-pwr);
-        robot.FRight.setPower(pwr);
-        robot.BLeft.setPower(pwr);
-        robot.BRight.setPower(-pwr*1.4);
-    }
-
-    public void moveForward() {
-        robot.FLeft.setPower(-pwr);
-        robot.FRight.setPower(-pwr*1.3);
-        robot.BLeft.setPower(-pwr);
-        robot.BRight.setPower(-pwr);
-    }
-
-    public void moveBackward() {
-        robot.FLeft.setPower(pwr);
-        robot.FRight.setPower(pwr);
-        robot.BLeft.setPower(pwr);
-        robot.BRight.setPower(pwr);
-    }
-
-    public void stopDrivebase() {
-        robot.FLeft.setPower(0);
-        robot.FRight.setPower(0);
-        robot.BLeft.setPower(0);
-        robot.BRight.setPower(0);
-    }
-
-    public void turnLeft() {
-        robot.FLeft.setPower(pwr);
-        robot.FRight.setPower(-pwr);
-        robot.BLeft.setPower(pwr);
-        robot.BRight.setPower(-pwr);
-    }
-
-    public void turnRight() {
-        robot.FLeft.setPower(-pwr);
-        robot.FRight.setPower(pwr);
-        robot.BLeft.setPower(-pwr);
-        robot.BRight.setPower(pwr);
+    // Returns an enum being the current position where the robot will park
+    public ParkingPosition getPosition() {
+        return position;
     }
 }

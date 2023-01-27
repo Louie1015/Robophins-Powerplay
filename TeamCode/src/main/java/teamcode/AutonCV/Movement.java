@@ -1,16 +1,16 @@
-package teamcode.AutonCV;
+package teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import teamcode.VisionTest;
 import org.openftc.easyopencv.OpenCvCamera;
 
 
 @Autonomous(name = "PowerPlayCV", group = "ppcv")
 public class Movement extends LinearOpMode {
 
-    private SleeveDetection sleeveDetection;
+    private VisionTest sleeveDetection;
     private OpenCvCamera camera;
     private String webcamName = "Webcam 1";
     //DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight;

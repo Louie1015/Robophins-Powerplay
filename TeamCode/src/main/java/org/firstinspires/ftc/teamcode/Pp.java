@@ -16,6 +16,7 @@ class Ppbot{
     public DcMotor FLeft = null;
     public DcMotor FRight = null;
     public DcMotor Slider = null;
+    public DcMotor Hslide = null;
     public Servo Take1 = null;
     public Servo Take2 = null;
 
@@ -26,14 +27,16 @@ class Ppbot{
         BRight = maps.dcMotor.get("br");
         FLeft = maps.dcMotor.get("fl");
         FRight = maps.dcMotor.get("fr");
+        Hslide = maps.dcMotor.get("hs");
         Take1 = maps.servo.get("grabber");
         Take2 = maps.servo.get("grabber2");
         Slider = maps.dcMotor.get("slider");
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        BRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        FLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        FRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        BRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        FLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        FRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        Hslide.setDirection(DcMotorSimple.Direction.FORWARD);
         Slider.setDirection(DcMotorSimple.Direction.FORWARD);
 
         BLeft.setPower(0.0);
@@ -41,14 +44,15 @@ class Ppbot{
         FLeft.setPower(0.0);
         FRight.setPower(0.0);
         Slider.setPower(0.0);
-        Take1.setPosition(0.53); // change these 2 later when we figure out the servo positions
-        Take2.setPosition(0);
+        Slider.setPower(0.0);
+        Hslide.setPower(0.0);
 
         BLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         FLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         FRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Hslide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
 
@@ -59,11 +63,11 @@ public class Pp extends LinearOpMode{
     double x;
     double y;
     double rx;
-    double Armpos1 = 0.2;
-    double Armpos2 = 0.2;
     double Slidepos = 0.0;
+    double Hpos = 0.0;
     final double Armspeed = 0.1;
     final double Slidespeed = 1.0;
+    final double Hspeed = 1.0;
     final double rotationScalar = 0.5;
     final double speedScalar = 0.8;
     double drivespeed = 0.2;
@@ -114,8 +118,8 @@ public class Pp extends LinearOpMode{
             }
             //if we want to go strafing, set a little moter powerfing for strafing
             else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03){
-                robot.BLeft.setPower(speedScalar * x * 0.7);
-                robot.BRight.setPower(speedScalar * x * 0.7);
+                robot.BLeft.setPower(speedScalar * x * 0.7 *1.4 /* the 1.4 is for post-new drivebase, for refrence later*/);
+                robot.BRight.setPower(speedScalar * x * 0.7*1.4);
                 robot.FLeft.setPower(speedScalar * x * 0.85);
                 robot.FRight.setPower(speedScalar * -x);
                 //if we dont want to move make sure we dont move
@@ -128,13 +132,18 @@ public class Pp extends LinearOpMode{
             //uppy downy. <- NOT DOWNY madge
             // this stuff needs changing i think
             // maybe add stopper
+            Hpos = 0.0;
+            if (gamepad1.y)
+                Hpos += Hspeed;
+            else if (gamepad1.a)
+                Hpos -= Hspeed ;
             Slidepos = 0.0;
-            if (Math.abs(gamepad1.right_trigger) > 0.0) // uppy
+            if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy
                 Slidepos += Slidespeed;
-            if (gamepad1.right_bumper) { // stopper
+            if (gamepad1.right_bumper || gamepad2.right_bumper) { // stopper
                 Slidepos += Slidespeed / 8;
             }
-            if (Math.abs(gamepad1.left_trigger) > 0.0) {
+            if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {
                 Slidepos -= Slidespeed / 4;
             }
             //open close :)
@@ -144,20 +153,17 @@ public class Pp extends LinearOpMode{
                 closed = false;
             }
             if (closed) {
-                robot.Take1.setPosition(0.53);
-                robot.Take2.setPosition(0);
+                robot.Take1.setPosition(0.17);// take 1 closed pos
+                robot.Take2.setPosition(0.47);// take 2 closed pos
             } else {
-                robot.Take1.setPosition(0);
-                robot.Take2.setPosition(0.53);
+                robot.Take1.setPosition(0.08);// take 1 open pos
+                robot.Take2.setPosition(0.61);// take 2 open pos
             }
             //set power and position for grabby and shit
             robot.Slider.setPower(Slidepos);
+            robot.Hslide.setPower(Hpos);
 
-            // this code does nothing; dead variable
-            Armpos1 = Range.clip(Armpos1, 0.0, 0.45);
-            Armpos2 = Range.clip(Armpos2, 0.0, 0.45);
-            //robot.Take1.setPosition(Armpos1);
-            //robot.Take2.setPosition(Armpos2);
+
 
             //telemetry :nerd_emoji:
             telemetry.addData("x","%.2f", x);

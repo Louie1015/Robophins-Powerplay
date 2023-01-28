@@ -51,6 +51,7 @@ public class VisionTest extends LinearOpMode {
         });
         waitForStart();
         while(opModeIsActive()) {
+            close();
             sleep(5000);
 
             if(SleeveDetection.truePath == 1){
@@ -161,5 +162,13 @@ public class VisionTest extends LinearOpMode {
         robot.FRight.setPower(pwr);
         robot.BLeft.setPower(-pwr);
         robot.BRight.setPower(pwr);
+    }
+    public void close() {
+        robot.Take1.setPosition(0.17);// take 1 closed pos
+        robot.Take2.setPosition(0.47);// take 2 closed pos
+    }
+    public void open() {
+        robot.Take1.setPosition(0.08);// take 1 open pos
+        robot.Take2.setPosition(0.61);// take 2 open pos
     }
 }

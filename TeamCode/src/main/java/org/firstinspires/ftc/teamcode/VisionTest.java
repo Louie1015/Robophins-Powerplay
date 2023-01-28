@@ -51,6 +51,7 @@ public class VisionTest extends LinearOpMode {
         });
         waitForStart();
         while(opModeIsActive()) {
+            sleep(5000);
 
             if(SleeveDetection.truePath == 1){
                 Path1();

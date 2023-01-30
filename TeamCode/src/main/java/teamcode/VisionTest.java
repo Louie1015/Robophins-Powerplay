@@ -8,7 +8,6 @@ import teamcode.SleeveDetection;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-
 @Autonomous(name = "Signal Sleeve Test")
 public class VisionTest extends LinearOpMode {
 
@@ -23,7 +22,7 @@ public class VisionTest extends LinearOpMode {
     //imports a new robot into the file
     Ppbot robot = new Ppbot();
     //motor power constant in our code
-    double pwr = 0.25;
+    double pwr = 0.35;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -52,6 +51,10 @@ public class VisionTest extends LinearOpMode {
         });
         waitForStart();
         while(opModeIsActive()) {
+            sleep(5000);
+            //close(); IF WE HAVE START CONE
+            //sleep(500);
+
 
             if(SleeveDetection.truePath == 1){
                 Path1();
@@ -83,56 +86,49 @@ public class VisionTest extends LinearOpMode {
 
     public void Path1(){
         moveLeft();
-        sleep(2600);
+        sleep(1700);
         stopDrivebase();
         sleep(500);
         moveForward();
         sleep(1500);
+
         stopDrivebase();
     }
 
     public void Path2(){
-        moveRight();
-        sleep(2700);
-        stopDrivebase();
-        sleep(500);
         moveForward();
-        sleep(2900);
-        stopDrivebase();
-        sleep(500);
-        moveLeft();
-        sleep(2600);
+        sleep(2000);
         stopDrivebase();
     }
 
     public void Path3(){
         moveRight();
-        sleep(2700);
+        sleep(1400);
         stopDrivebase();
         sleep(500);
         moveForward();
-        sleep(1600);
+        sleep(1300);
         stopDrivebase();
     }
     public void moveLeft() {
-        robot.FLeft.setPower(pwr);
-        robot.FRight.setPower(-pwr);
-        robot.BLeft.setPower(-pwr*1.35);
-        robot.BRight.setPower(pwr);
+        robot.FLeft.setPower(-pwr);
+        robot.FRight.setPower(pwr);
+        robot.BLeft.setPower(-pwr*1.2);
+        robot.BRight.setPower(-pwr);
     }
 
     public void moveRight() {
-        robot.FLeft.setPower(-pwr);
-        robot.FRight.setPower(pwr);
+        robot.FLeft.setPower(pwr);
+        robot.FRight.setPower(-pwr);
         robot.BLeft.setPower(pwr);
-        robot.BRight.setPower(-pwr*1.4);
+        robot.BRight.setPower(pwr*1.3);
     }
 
     public void moveForward() {
-        robot.FLeft.setPower(-pwr);
-        robot.FRight.setPower(-pwr*1.3);
+        robot.FLeft.setPower(pwr);
+        robot.FRight.setPower(pwr);
         robot.BLeft.setPower(-pwr);
-        robot.BRight.setPower(-pwr);
+        robot.BRight.setPower(pwr);
     }
 
     public void moveBackward() {
@@ -161,5 +157,13 @@ public class VisionTest extends LinearOpMode {
         robot.FRight.setPower(pwr);
         robot.BLeft.setPower(-pwr);
         robot.BRight.setPower(pwr);
+    }
+    public void close() {
+        robot.Take1.setPosition(0.17);// take 1 closed pos
+        robot.Take2.setPosition(0.47);// take 2 closed pos
+    }
+    public void open() {
+        robot.Take1.setPosition(0.08);// take 1 open pos
+        robot.Take2.setPosition(0.61);// take 2 open pos
     }
 }

@@ -15,7 +15,9 @@ class Ppbot{
     public DcMotor BRight = null;
     public DcMotor FLeft = null;
     public DcMotor FRight = null;
-    public DcMotor Slider = null;
+    public DcMotor Slider1 = null;
+
+    public DcMotor Slider2 = null;
     public DcMotor Hslide = null;
     public Servo Take1 = null;
     public Servo Take2 = null;
@@ -30,28 +32,31 @@ class Ppbot{
         Hslide = maps.dcMotor.get("hs");
         Take1 = maps.servo.get("grabber");
         Take2 = maps.servo.get("grabber2");
-        Slider = maps.dcMotor.get("slider");
+        Slider1 = maps.dcMotor.get("slider1");
+        Slider2 = maps.dcMotor.get("slider2");
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         BRight.setDirection(DcMotorSimple.Direction.REVERSE);
         FLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         FRight.setDirection(DcMotorSimple.Direction.REVERSE);
         Hslide.setDirection(DcMotorSimple.Direction.FORWARD);
-        Slider.setDirection(DcMotorSimple.Direction.FORWARD);
+        Slider1.setDirection(DcMotorSimple.Direction.REVERSE);
+        Slider2.setDirection(DcMotorSimple.Direction.FORWARD);
 
         BLeft.setPower(0.0);
         BRight.setPower(0.0);
         FLeft.setPower(0.0);
         FRight.setPower(0.0);
-        Slider.setPower(0.0);
-        Slider.setPower(0.0);
+        Slider1.setPower(0.0);
+        Slider2.setPower(0.0);
         Hslide.setPower(0.0);
 
         BLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         FLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         FRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Slider1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Slider2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Hslide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
@@ -95,9 +100,9 @@ public class Pp extends LinearOpMode{
 
             //if not turning, do a little driving.
             if (gamepad1.dpad_up)
-                y = 0.2;
+                y = 0.25;
             if (gamepad1.dpad_down)
-                y = -0.2;
+                y = -0.25;
             if (gamepad1.dpad_left)
                 x = -0.3;
             if (gamepad1.dpad_right)
@@ -139,7 +144,7 @@ public class Pp extends LinearOpMode{
                 Hpos -= Hspeed ;
             Slidepos = 0.0;
             if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy
-                Slidepos += Slidespeed;
+                Slidepos += Slidespeed / 1.1;
             if (gamepad1.right_bumper || gamepad2.right_bumper) { // stopper
                 Slidepos += Slidespeed / 8;
             }
@@ -160,7 +165,8 @@ public class Pp extends LinearOpMode{
                 robot.Take2.setPosition(0.61);// take 2 open pos
             }
             //set power and position for grabby and shit
-            robot.Slider.setPower(Slidepos);
+            robot.Slider1.setPower(Slidepos);
+            robot.Slider2.setPower(Slidepos);
             robot.Hslide.setPower(Hpos);
 
 

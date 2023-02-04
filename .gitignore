@@ -86,3 +86,4 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 java_pid5476.hprof
+*.hprof

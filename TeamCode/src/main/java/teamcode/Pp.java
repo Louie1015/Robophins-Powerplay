@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.Range;
 
 import java.util.Map;
@@ -21,6 +22,7 @@ class Ppbot{
     public Servo Take1 = null;
     public Servo Take2 = null;
 
+    public ColorSensor KTsensor = null;
     HardwareMap map = null;
     public void init(HardwareMap maps) {
         map = maps;
@@ -33,6 +35,7 @@ class Ppbot{
         Take2 = maps.servo.get("grabber2");
         Slider1 = maps.dcMotor.get("slider1");
         Slider2 = maps.dcMotor.get("slider2");
+        KTsensor = maps.get(ColorSensor.class, "Color");
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         BRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -175,6 +178,11 @@ public class Pp extends LinearOpMode{
             telemetry.addData("y","%.2f", y);
             telemetry.addData("servo1","%.2f", robot.Take1.getPosition());
             telemetry.addData("servo2","%.2f", robot.Take2.getPosition()); // REMEMBER TO CONFIGURE THIS ON PHONE
+            telemetry.update();
+            //color sensor telemetry
+            telemetry.addData("Red", robot.KTsensor.red());
+            telemetry.addData("Green", robot.KTsensor.green());
+            telemetry.addData("Blue", robot.KTsensor.blue());
             telemetry.update();
 
             sleep(50);

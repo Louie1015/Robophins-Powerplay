@@ -46,29 +46,28 @@ public class BlueRight extends LinearOpMode{
 
         waitForStart();
         int step = 0;
-        mainRobot.followTrajectory(firstRight);
+        mainRobot.followTrajectory(firstRight); // GO RIGHT
         mainRobot.pause(200);
-        mainRobot.followTrajectory(firstForward);
+        mainRobot.followTrajectory(firstForward); // GO FORWARD
         mainRobot.pause(200);
         step += 1;
         telemetry.addData("It works","YES" + step); telemetry.update();
-        mainRobot.followTrajectory(firstLeft);
+        mainRobot.followTrajectory(firstLeft); // GO LEFT
 //        mainRobot.slides.setSlidesPower(1.0);
         step += 1;
         telemetry.addData("It works", "MAYBE" + step); telemetry.update();
-
-        mainRobot.slides.setSlidesPower(1.0);
-        mainRobot.pause(2750);
-        mainRobot.followTrajectory(creep);
+        mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
+        mainRobot.pause(2750); // TIME TO GET TO TOP
+        mainRobot.followTrajectory(creep); // CREEP FORWARDS
         step += 1;
         telemetry.addData("It works", "NO" + step); telemetry.update();
-        mainRobot.grabber.openGrabber();
-        mainRobot.pause(1000);
-        mainRobot.slides.setSlidesPower(-0.3);
+        mainRobot.grabber.openGrabber(); //DROP CONE
+        mainRobot.pause(700);
+        mainRobot.slides.setSlidesPower(-0.3); // GO DOWN WHILE OPEN
         mainRobot.pause(1800);
-        mainRobot.slides.setSlidesPower(0.1);
+        mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
         mainRobot.pause(1000);
-        mainRobot.grabber.closeGrabber();
+        mainRobot.grabber.closeGrabber();// CLOSE TODO: MAKE BOT GO BACKWARDS BEFORE CLOSE
         mainRobot.pause(300);
 
 

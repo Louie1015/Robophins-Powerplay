@@ -31,7 +31,7 @@ public class BlueRight extends LinearOpMode{
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
-                .forward(60)
+                .forward(50)
                 .build();
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
@@ -39,15 +39,17 @@ public class BlueRight extends LinearOpMode{
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
-                .forward(2)
+                .forward(4)
                 .build();
 
-        Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end(),true)
-                .forward(2)
+        Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
+                .back(4)
                 .build();
 
         waitForStart();
         int step = 0;
+        mainRobot.grabber.closeGrabber();
+        mainRobot.pause(200);
         mainRobot.followTrajectory(firstRight); // GO RIGHT
         mainRobot.pause(200);
         mainRobot.followTrajectory(firstForward); // GO FORWARD

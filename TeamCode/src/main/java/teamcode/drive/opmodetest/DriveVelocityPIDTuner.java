@@ -1,4 +1,4 @@
-package teamcode.drive.opmode;
+package teamcode.drive.opmodetest;
 
 import static teamcode.drive.DriveConstants.MAX_ACCEL;
 import static teamcode.drive.DriveConstants.MAX_VEL;

@@ -40,8 +40,10 @@ public class BlueRight extends LinearOpMode{
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
                 .forward(2)
-   //                     SampleMecanumDrive.getVelocityConstraint(3, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
- //                       SampleMecanumDrive.getAccelerationConstraint(1))
+                .build();
+
+        Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end(),true)
+                .forward(2)
                 .build();
 
         waitForStart();
@@ -67,9 +69,9 @@ public class BlueRight extends LinearOpMode{
         mainRobot.pause(1800);
         mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
         mainRobot.pause(1000);
-        mainRobot.grabber.closeGrabber();// CLOSE TODO: MAKE BOT GO BACKWARDS BEFORE CLOSE
+        mainRobot.followTrajectory(backcreep);
+        mainRobot.grabber.closeGrabber();// CLOSE
         mainRobot.pause(300);
-
 
     }
 }

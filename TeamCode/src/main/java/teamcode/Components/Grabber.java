@@ -1,5 +1,7 @@
 package teamcode.Components;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -9,8 +11,8 @@ public class Grabber {
     Servo grabber1;
     Servo grabber2;
 
-    public static double openPos1 = 0.08;
-    public static double openPos2 = 0.61;
+    public static double openPos1 = 0.0;
+    public static double openPos2 = 1;
     public static double closePos1 = 0.17;
     public static double closePos2 = 0.47;
 

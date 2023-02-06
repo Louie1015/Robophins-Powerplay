@@ -17,15 +17,14 @@ public class Slides {
         slider1 = hardwareMap.get (DcMotor.class, "slider1");
         slider1.setDirection(DcMotorSimple.Direction.REVERSE);
         slider2 = hardwareMap.get (DcMotor.class, "slider2");
-        slider1.setDirection(DcMotorSimple.Direction.FORWARD);
+        slider2.setDirection(DcMotorSimple.Direction.FORWARD);
         slider1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slider2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setSlidesPower (double power) {
-        double finalPower = power;
-        slider1.setPower(finalPower);
-        slider2.setPower(finalPower);
+        slider1.setPower(power);
+        slider2.setPower(power);
     }
 
 }

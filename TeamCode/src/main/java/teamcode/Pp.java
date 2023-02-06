@@ -178,7 +178,7 @@ public class Pp extends LinearOpMode{
             telemetry.addData("y","%.2f", y);
             telemetry.addData("servo1","%.2f", robot.Take1.getPosition());
             telemetry.addData("servo2","%.2f", robot.Take2.getPosition()); // REMEMBER TO CONFIGURE THIS ON PHONE
-            telemetry.update();
+            
             //color sensor telemetry
             telemetry.addData("Red", robot.KTsensor.red());
             telemetry.addData("Green", robot.KTsensor.green());

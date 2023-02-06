@@ -69,7 +69,7 @@ public class BlueRight extends LinearOpMode{
         mainRobot.pause(1800);
         mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
         mainRobot.pause(1000);
-        mainRobot.followTrajectory(backcreep);
+        mainRobot.followTrajectory(backcreep); // go backwards so you can close
         mainRobot.grabber.closeGrabber();// CLOSE
         mainRobot.pause(300);
 

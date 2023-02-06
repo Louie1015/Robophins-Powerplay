@@ -15,8 +15,8 @@ public class Grabber {
     public static double closePos2 = 0.47;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
-        grabber1 = hardwareMap.get(Servo.class, "Take1");
-        grabber2 = hardwareMap.get(Servo.class, "Take 2");
+        grabber1 = hardwareMap.get(Servo.class, "grabber");
+        grabber2 = hardwareMap.get(Servo.class, "grabber2");
 
     }
 

@@ -14,9 +14,9 @@ public class Slides {
     private DcMotor slider2;
 
     public Slides (HardwareMap hardwareMap, Telemetry telemetry) {
-        slider1 = hardwareMap.get (DcMotor.class, "Slider1");
+        slider1 = hardwareMap.get (DcMotor.class, "slider1");
         slider1.setDirection(DcMotorSimple.Direction.REVERSE);
-        slider2 = hardwareMap.get (DcMotor.class, "Slider2");
+        slider2 = hardwareMap.get (DcMotor.class, "slider2");
         slider1.setDirection(DcMotorSimple.Direction.FORWARD);
         slider1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slider2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

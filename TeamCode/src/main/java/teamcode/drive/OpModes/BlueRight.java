@@ -16,8 +16,8 @@ import teamcode.drive.SampleMecanumDrive;
 public class BlueRight extends LinearOpMode{
 
     MainRobot mainRobot;
-    public static double firstrightdist = 25;
-    public static double firstcycleleft = 35;
+    public static double firstleftdist = 19.75;
+    public static double firstcycleright = 8.5;
     public static double slidepower = 1.0;
 
 
@@ -27,20 +27,20 @@ public class BlueRight extends LinearOpMode{
         Pose2d startPose = new Pose2d(-34, 70, Math.toRadians(-90));
         mainRobot.setPoseEstimate(startPose);
 
-        Trajectory firstRight = mainRobot.trajectoryBuilder(startPose)
-                .strafeRight(firstrightdist)
+        Trajectory firstLeft = mainRobot.trajectoryBuilder(startPose)
+                .strafeLeft(firstleftdist)
                 .build();
 
-        Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
-                .forward(50)
+        Trajectory firstForward = mainRobot.trajectoryBuilder(firstLeft.end())
+                .forward(46.5)
                 .build();
 
-        Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeLeft(firstcycleleft)
+        Trajectory firstRight = mainRobot.trajectoryBuilder(firstForward.end())
+                .strafeRight(firstcycleright)
                 .build();
 
-        Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
-                .forward(4)
+        Trajectory creep = mainRobot.trajectoryBuilder(firstRight.end())
+                .forward(3)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
@@ -50,29 +50,32 @@ public class BlueRight extends LinearOpMode{
         waitForStart();
         int step = 0;
         mainRobot.grabber.closeGrabber();
-        mainRobot.pause(200);
-        mainRobot.followTrajectory(firstRight); // GO RIGHT
+        mainRobot.pause(800);
+        mainRobot.slides.setSlidesPower(1.0);
+        mainRobot.pause(300);
+        mainRobot.slides.setSlidesPower(0.0);
+        mainRobot.followTrajectory(firstLeft); // GO RIGHT
         mainRobot.pause(200);
         mainRobot.followTrajectory(firstForward); // GO FORWARD
         mainRobot.pause(200);
         step += 1;
         telemetry.addData("It works","YES" + step); telemetry.update();
-        mainRobot.followTrajectory(firstLeft); // GO LEFT
+        mainRobot.followTrajectory(firstRight); // GO LEFT
 //        mainRobot.slides.setSlidesPower(1.0);
         step += 1;
         telemetry.addData("It works", "MAYBE" + step); telemetry.update();
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
-        mainRobot.pause(2750); // TIME TO GET TO TOP
+        mainRobot.pause(2600); // TIME TO GET TO TOP
         mainRobot.followTrajectory(creep); // CREEP FORWARDS
         step += 1;
         telemetry.addData("It works", "NO" + step); telemetry.update();
         mainRobot.grabber.openGrabber(); //DROP CONE
         mainRobot.pause(700);
+        mainRobot.followTrajectory(backcreep); // go backwards so you can close
         mainRobot.slides.setSlidesPower(-0.3); // GO DOWN WHILE OPEN
         mainRobot.pause(1800);
         mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
         mainRobot.pause(1000);
-        mainRobot.followTrajectory(backcreep); // go backwards so you can close
         mainRobot.grabber.closeGrabber();// CLOSE
         mainRobot.pause(300);
 

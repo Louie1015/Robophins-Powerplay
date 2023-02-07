@@ -52,27 +52,22 @@ public class CamWithPidRight extends LinearOpMode{
             }
         });
         waitForStart();
-
+        int sleeveStage = Cammy.truePath;
+        telemetry.addData("Path: ", camlyn.getPosition());
+        telemetry.update();
         while(opModeIsActive()) {
             sleep(2000);
 
             // if you want code to run before we check which sleeve is detected(ex:close grabber on startup), run it here
 
-
-            if(Cammy.truePath == 1){
+            if(sleeveStage == 1){
                 Path1();
-                telemetry.addData("P1: ", camlyn.getPosition());
-                telemetry.update();
                 break;
-            }else if(Cammy.truePath == 2){
+            }else if(sleeveStage == 2){
                 Path2();
-                telemetry.addData("P2: ", camlyn.getPosition());
-                telemetry.update();
                 break;
-            }else if(Cammy.truePath == 3){
+            }else if(sleeveStage == 3){
                 Path3();
-                telemetry.addData("P3: ", camlyn.getPosition());
-                telemetry.update();
                 break;
             }
             // conversely, if you want to run code after, put it here

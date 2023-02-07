@@ -36,7 +36,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeRight(firstcycleleft)
+                .strafeLeft(firstcycleleft)
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
@@ -61,7 +61,6 @@ public class BlueLeft extends LinearOpMode{
         step += 1;
         telemetry.addData("It works","YES" + step); telemetry.update();
         mainRobot.followTrajectory(firstLeft); // GO LEFT
-//        mainRobot.slides.setSlidesPower(1.0);
         step += 1;
         telemetry.addData("It works", "MAYBE" + step); telemetry.update();
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP

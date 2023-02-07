@@ -39,7 +39,7 @@ class Ppbot{
         Slider1 = maps.dcMotor.get("slider1");
         Slider2 = maps.dcMotor.get("slider2");
         KTsensor = maps.get(ColorSensor.class, "Color");
-        HorizontalTouch = map.get(TouchSensor.class, "limit");
+        HorizontalTouch = map.get(TouchSensor.class, "Touch");
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         BRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -140,9 +140,8 @@ public class Pp extends LinearOpMode{
                 robot.FLeft.setPower(0);
                 robot.FRight.setPower(0);
             }
-            //uppy downy. <- NOT DOWNY madge
-            // this stuff needs changing i think
-            // maybe add stopper
+            //uppy downy. <- NOT DOWNY madge <- YES DOWNY WE HAVE RETRACTION NOW
+
             Hpos = 0.0;
             if ((gamepad2.y || gamepad1.y) && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
                 Hpos += Hspeed;
@@ -154,7 +153,7 @@ public class Pp extends LinearOpMode{
             if (gamepad1.right_bumper || gamepad2.right_bumper) { // stopper
                 Slidepos += Slidespeed / 8;
             }
-            if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {
+            if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {// downy
                 Slidepos -= Slidespeed / 4;
             }
             //open close :)
@@ -186,6 +185,13 @@ public class Pp extends LinearOpMode{
             telemetry.addData("Red", robot.KTsensor.red());
             telemetry.addData("Green", robot.KTsensor.green());
             telemetry.addData("Blue", robot.KTsensor.blue());
+            //limit switch telemetry
+            if (robot.HorizontalTouch.isPressed()) {
+                telemetry.addData("LimitSwitch", " is pressed");
+            } else {
+                telemetry.addData("LimitSwitch", " is not pressed");
+            }
+
             telemetry.update();
 
             sleep(50);

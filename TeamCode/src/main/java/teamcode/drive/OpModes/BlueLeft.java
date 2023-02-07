@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import teamcode.Components.MainRobot;
 import teamcode.drive.DriveConstants;
 import teamcode.drive.SampleMecanumDrive;
+import teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
 @Autonomous
@@ -47,6 +48,30 @@ public class BlueLeft extends LinearOpMode{
                 .back(4)
                 .build();
 
+        TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
+                .turn(Math.toRadians(90))
+                .build();
+
+        Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
+                .forward(35)
+                .build();
+
+        Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
+                .forward(2)
+                .build();
+
+        Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
+                .back(36)
+                .build();
+
+        TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
+                .turn(Math.toRadians(-90))
+                .build();
+
+        Trajectory cyclecreep2 = mainRobot.trajectoryBuilder(turn2.end())
+                .forward(4)
+                .build();
+
         waitForStart();
         int step = 0;
         mainRobot.grabber.closeGrabber();
@@ -75,8 +100,35 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.pause(1800);
         mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
         mainRobot.pause(1000);
-        mainRobot.grabber.closeGrabber();// CLOSE
+   //     mainRobot.grabber.closeGrabber();// CLOSE
+   //     mainRobot.pause(300);
+        mainRobot.followTrajectorySequence(turn1);
+        mainRobot.pause(200);
+        mainRobot.followTrajectory(cycleforward);
+        mainRobot.pause(200);
+        mainRobot.slides.setSlidesPower(1.0);
+        mainRobot.pause(500);
+        mainRobot.slides.setSlidesPower(0.0);
+        mainRobot.followTrajectory(cyclecreep);
+        mainRobot.grabber.closeGrabber();
+        mainRobot.slides.setSlidesPower(1.0);
+        mainRobot.pause(500);
+        mainRobot.slides.setSlidesPower(0.0);
+        mainRobot.followTrajectory(backcycle);
+        mainRobot.pause(200);
+        mainRobot.followTrajectorySequence(turn2);
+        mainRobot.pause(200);
+        mainRobot.slides.setSlidesPower(1.0);
+        mainRobot.pause(2000);
+        mainRobot.followTrajectory(cyclecreep2);
         mainRobot.pause(300);
+        mainRobot.grabber.openGrabber();
+        mainRobot.slides.setSlidesPower(-0.3);
+        mainRobot.pause(1800);
+
+
+
+
 
     }
 }

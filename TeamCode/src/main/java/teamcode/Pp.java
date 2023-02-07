@@ -144,9 +144,9 @@ public class Pp extends LinearOpMode{
             // this stuff needs changing i think
             // maybe add stopper
             Hpos = 0.0;
-            if (gamepad1.y && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
+            if ((gamepad2.y || gamepad1.y) && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
                 Hpos += Hspeed;
-            else if (gamepad1.a)
+            else if (gamepad1.a || gamepad2.a)
                 Hpos -= Hspeed ;
             Slidepos = 0.0;
             if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy

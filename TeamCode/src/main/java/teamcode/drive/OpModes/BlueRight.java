@@ -20,6 +20,7 @@ public class BlueRight extends LinearOpMode{
     public static double firstcycleleft = 35;
     public static double slidepower = 1.0;
 
+
     @Override
     public void runOpMode() {
         mainRobot = new MainRobot(hardwareMap, telemetry);

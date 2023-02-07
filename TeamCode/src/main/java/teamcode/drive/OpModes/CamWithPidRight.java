@@ -11,11 +11,10 @@ import teamcode.Components.Cammy;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-public class CamWithPid extends LinearOpMode{
+public class CamWithPidRight extends LinearOpMode{
     private Cammy camlyn;
-    public static double firstrightdist = 25;
-    public static double firstcycleleft = 35;
-    public static double slidepower = 1.0;
+    public static double firstleftdist = 19.75;
+    public static double firstcycleright = 8.5;
 
 
     OpenCvCamera webcam;
@@ -93,7 +92,7 @@ public class CamWithPid extends LinearOpMode{
         drop1();
         //park into left sector (Yellow)
         Trajectory yellowTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(20)
+                .strafeLeft(12)
                 .build();
         mainRobot.followTrajectory(yellowTraj1);
     }
@@ -101,14 +100,17 @@ public class CamWithPid extends LinearOpMode{
     public void Path2(){
         drop1();
         //park into middle sector (Blue)
-        //should already be in it, not much needs to be done but might need some small adjustments
+        Trajectory blueTraj1 = mainRobot.trajectoryBuilder(tempPose)
+                .strafeRight(12)
+                .build();
+        mainRobot.followTrajectory(blueTraj1);
     }
 
     public void Path3(){
         drop1();
         //park into right sector (Magenta)
         Trajectory magentaTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeRight(20)
+                .strafeRight(33)
                 .build();
         mainRobot.followTrajectory(magentaTraj1);
     }
@@ -116,64 +118,69 @@ public class CamWithPid extends LinearOpMode{
         Pose2d startPose = new Pose2d(-34, 70, Math.toRadians(-90));
         mainRobot.setPoseEstimate(startPose);
 
-        Trajectory firstRight = mainRobot.trajectoryBuilder(startPose)
-                .strafeRight(firstrightdist)
+        Trajectory firstLeft = mainRobot.trajectoryBuilder(startPose)
+                .strafeLeft(firstleftdist)
                 .build();
 
-        Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
-                .forward(50)
+        Trajectory firstForward = mainRobot.trajectoryBuilder(firstLeft.end())
+                .forward(46.5)
                 .build();
 
-        Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeLeft(firstcycleleft)
+        Trajectory firstRight = mainRobot.trajectoryBuilder(firstForward.end())
+                .strafeRight(firstcycleright)
                 .build();
 
-        Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
-                .forward(4)
+        Trajectory creep = mainRobot.trajectoryBuilder(firstRight.end())
+                .forward(3)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
-                .back(5)
+                .back(4)
                 .build();
 
+        waitForStart();
         int step = 0;
-        mainRobot.grabber.closeGrabber();
-        mainRobot.pause(500);
-        mainRobot.followTrajectory(firstRight); // GO RIGHT
-        mainRobot.pause(200);
+        mainRobot.grabber.closeGrabber(); // close on init
+        mainRobot.pause(800);
         step += 1;
         telemetry.addData("step",":#" + step); telemetry.update();
-        mainRobot.followTrajectory(firstForward); // GO FORWARD
-        mainRobot.pause(200);
+
+        mainRobot.slides.setSlidesPower(1.0); // lift so it doesnt fall
+        mainRobot.pause(300);
         step += 1;
         telemetry.addData("step",":#" + step); telemetry.update();
+
+        mainRobot.slides.setSlidesPower(0.0); // make sure it stops going up
         mainRobot.followTrajectory(firstLeft); // GO LEFT
         step += 1;
-        telemetry.addData("step", ":#" + step); telemetry.update();
-        mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
-        mainRobot.pause(2750); // TIME TO GET TO TOP
+        telemetry.addData("step",":#" + step); telemetry.update();
+
+        mainRobot.pause(200);
+        mainRobot.followTrajectory(firstForward); // GO FORWARD
         step += 1;
         telemetry.addData("step",":#" + step); telemetry.update();
+
+        mainRobot.pause(200);
+        step += 1;
+        telemetry.addData("step",":#" + step); telemetry.update();
+        mainRobot.followTrajectory(firstRight); // GO RIGHT
+
+        step += 1;
+        telemetry.addData("step",":#" + step); telemetry.update();
+        mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
+        mainRobot.pause(2600); // TIME TO GET TO TOP
         mainRobot.followTrajectory(creep); // CREEP FORWARDS
         step += 1;
-        telemetry.addData("step", ":#" + step); telemetry.update();
+        telemetry.addData("It works", "NO" + step); telemetry.update();
         mainRobot.grabber.openGrabber(); //DROP CONE
-        mainRobot.pause(500);
-        step += 1;
-        telemetry.addData("step",":#" + step); telemetry.update();
+        mainRobot.pause(700);
+        mainRobot.followTrajectory(backcreep); // go backwards so you can close
         mainRobot.slides.setSlidesPower(-0.3); // GO DOWN WHILE OPEN
         mainRobot.pause(1800);
-        step += 1;
-        telemetry.addData("step",":#" + step); telemetry.update();
         mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
         mainRobot.pause(1000);
-        step += 1;
-        telemetry.addData("step",":#" + step); telemetry.update();
-        mainRobot.followTrajectory(backcreep); // go backwards so you can close
         mainRobot.grabber.closeGrabber();// CLOSE
-        mainRobot.pause(500);
-        step += 1;
-        telemetry.addData("step",":#" + step); telemetry.update();
+        mainRobot.pause(300);
         tempPose = backcreep.end();
     } //this is similar to BlueRight
 

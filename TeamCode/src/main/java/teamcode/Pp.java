@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
 import java.util.Map;
@@ -23,6 +24,7 @@ class Ppbot{
     public Servo Take2 = null;
 
     public ColorSensor KTsensor = null;
+    public TouchSensor HorizontalTouch = null;
     HardwareMap map = null;
 
     public void init(HardwareMap maps) {
@@ -37,6 +39,7 @@ class Ppbot{
         Slider1 = maps.dcMotor.get("slider1");
         Slider2 = maps.dcMotor.get("slider2");
         KTsensor = maps.get(ColorSensor.class, "Color");
+        HorizontalTouch = map.get(TouchSensor.class, "limit");
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         BRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -141,7 +144,7 @@ public class Pp extends LinearOpMode{
             // this stuff needs changing i think
             // maybe add stopper
             Hpos = 0.0;
-            if (gamepad1.y)
+            if (gamepad1.y && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
                 Hpos += Hspeed;
             else if (gamepad1.a)
                 Hpos -= Hspeed ;
@@ -161,8 +164,8 @@ public class Pp extends LinearOpMode{
                 closed = false;
             }
             if (closed) {
-                robot.Take1.setPosition(0.17);// take 1 closed pos
-                robot.Take2.setPosition(0.47);// take 2 closed pos
+                robot.Take1.setPosition(0.25);// take 1 closed pos
+                robot.Take2.setPosition(0.4);// take 2 closed pos
             } else {
                 robot.Take1.setPosition(0.08);// take 1 open pos
                 robot.Take2.setPosition(0.61);// take 2 open pos

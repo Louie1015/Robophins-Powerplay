@@ -52,6 +52,7 @@ public class CamWithPid extends LinearOpMode{
             sleep(5000);
             //close(); IF WE HAVE START CONE
             //sleep(500);
+            // TODO: if you want code to run before we check which sleeve is detected(ex:close grabber on startup), run it here
 
 
             if(Cammy.truePath == 1){
@@ -70,6 +71,7 @@ public class CamWithPid extends LinearOpMode{
                 telemetry.update();
                 break;
             }
+            // conversely, if you want to run code after, put it here
 
 
         }

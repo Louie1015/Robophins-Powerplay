@@ -157,9 +157,9 @@ public class Pp extends LinearOpMode{
                 Slidepos -= Slidespeed / 4;
             }
             //open close :)
-            if (gamepad1.x) {
+            if (gamepad1.x || gamepad2.x) {
                 closed = true;
-            } else if (gamepad1.b) {
+            } else if (gamepad1.b || gamepad2.b) {
                 closed = false;
             }
             if (closed) {
@@ -186,8 +186,8 @@ public class Pp extends LinearOpMode{
             telemetry.addData("Green", robot.KTsensor.green());
             telemetry.addData("Blue", robot.KTsensor.blue());
             //limit switch telemetry
-            if (robot.HorizontalTouch.isPressed()) {
-                telemetry.addData("LimitSwitch", " is pressed");
+            if (true) {
+                telemetry.addData("LimitSwitch", robot.HorizontalTouch.getValue());
             } else {
                 telemetry.addData("LimitSwitch", " is not pressed");
             }

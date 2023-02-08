@@ -2,6 +2,7 @@ package teamcode.drive.OpModes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -11,10 +12,11 @@ import teamcode.Components.Cammy;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+@Autonomous
 public class CamWithPidRight extends LinearOpMode{
     private Cammy camlyn;
-    public static double firstleftdist = 19.75;
-    public static double firstcycleright = 8.5;
+    public static double firstleftdist = 20.75;
+    public static double firstcycleright = 9.5;
 
 
     OpenCvCamera webcam;
@@ -105,7 +107,7 @@ public class CamWithPidRight extends LinearOpMode{
         drop1();
         //park into right sector (Magenta)
         Trajectory magentaTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeRight(33)
+                .strafeRight(34)
                 .build();
         mainRobot.followTrajectory(magentaTraj1);
     }
@@ -132,8 +134,6 @@ public class CamWithPidRight extends LinearOpMode{
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
                 .back(4)
                 .build();
-
-        waitForStart();
         int step = 0;
         mainRobot.grabber.closeGrabber(); // close on init
         mainRobot.pause(800);
@@ -170,10 +170,12 @@ public class CamWithPidRight extends LinearOpMode{
         mainRobot.grabber.openGrabber(); //DROP CONE
         mainRobot.pause(700);
         mainRobot.followTrajectory(backcreep); // go backwards so you can close
-        mainRobot.slides.setSlidesPower(-0.3); // GO DOWN WHILE OPEN
+        mainRobot.slides.setSlidesPower(-0.4); // GO DOWN WHILE OPEN
         mainRobot.pause(1800);
-        mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
-        mainRobot.pause(1000);
+        mainRobot.slides.setSlidesPower(-0.7);//MAKE SURE U ACTUALLY GO DOWN
+        mainRobot.pause(500);
+        /*mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
+        mainRobot.pause(1000);*/
         mainRobot.grabber.closeGrabber();// CLOSE
         mainRobot.pause(300);
         tempPose = backcreep.end();

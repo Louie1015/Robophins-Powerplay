@@ -17,8 +17,8 @@ import teamcode.trajectorysequence.TrajectorySequence;
 public class BlueLeft extends LinearOpMode{
 
     MainRobot mainRobot;
-    public static double firstrightdist = 19.75;
-    public static double firstcycleleft = 8.5;
+    public static double firstrightdist = 20.75;
+    public static double firstcycleleft = 15;
     public static double slidepower = 1.0;
 
 
@@ -41,19 +41,21 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
-                .forward(3)
+                .forward(4)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
                 .back(4)
                 .build();
-
-        TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
-                .turn(Math.toRadians(-90))
+        TrajectorySequence strafeLeft1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
+                .strafeLeft(15)
+                .build();
+        TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(strafeLeft1.end())
+                .turn(Math.toRadians(90))
                 .build();
 
         Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
-                .forward(35)
+                .forward(20)
                 .build();
 
         Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
@@ -65,7 +67,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
-                .turn(Math.toRadians(90))
+                .turn(Math.toRadians(-90))
                 .build();
 
         Trajectory cyclecreep2 = mainRobot.trajectoryBuilder(turn2.end())
@@ -98,10 +100,14 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.followTrajectory(backcreep); // go backwards so you can close
         mainRobot.slides.setSlidesPower(-0.3); // GO DOWN WHILE OPEN
         mainRobot.pause(1800);
+        /*mainRobot.slides.setSlidesPower(-0.7);//MAKE SURE U ACTUALLY GO DOWN
+        mainRobot.pause(500);
         mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
-        mainRobot.pause(1000);
+        mainRobot.pause(1000);*/
    //     mainRobot.grabber.closeGrabber();// CLOSE
    //     mainRobot.pause(300);
+        mainRobot.followTrajectorySequence(strafeLeft1);
+        mainRobot.pause(200);
         mainRobot.followTrajectorySequence(turn1);
         mainRobot.pause(200);
         mainRobot.followTrajectory(cycleforward);
@@ -111,9 +117,10 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.slides.setSlidesPower(0.0);
         mainRobot.followTrajectory(cyclecreep);
         mainRobot.grabber.closeGrabber();
+        mainRobot.pause(500);
         mainRobot.slides.setSlidesPower(1.0);
         mainRobot.pause(500);
-        mainRobot.slides.setSlidesPower(0.0);
+        mainRobot.slides.setSlidesPower(0.05);
         mainRobot.followTrajectory(backcycle);
         mainRobot.pause(200);
         mainRobot.followTrajectorySequence(turn2);
@@ -123,6 +130,7 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.followTrajectory(cyclecreep2);
         mainRobot.pause(300);
         mainRobot.grabber.openGrabber();
+        mainRobot.pause(500);
         mainRobot.slides.setSlidesPower(-0.3);
         mainRobot.pause(1800);
 

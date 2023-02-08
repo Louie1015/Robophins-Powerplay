@@ -86,7 +86,6 @@ public class BlueLeft extends LinearOpMode{
         step += 1;
         telemetry.addData("It works","YES" + step); telemetry.update();
         mainRobot.followTrajectory(firstLeft); // GO LEFT
-//        mainRobot.slides.setSlidesPower(1.0);
         step += 1;
         telemetry.addData("It works", "MAYBE" + step); telemetry.update();
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP

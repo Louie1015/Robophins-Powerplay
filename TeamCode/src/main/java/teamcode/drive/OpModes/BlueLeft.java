@@ -49,7 +49,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
-                .turn(Math.toRadians(90))
+                .turn(Math.toRadians(-90))
                 .build();
 
         Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
@@ -65,7 +65,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
-                .turn(Math.toRadians(-90))
+                .turn(Math.toRadians(90))
                 .build();
 
         Trajectory cyclecreep2 = mainRobot.trajectoryBuilder(turn2.end())

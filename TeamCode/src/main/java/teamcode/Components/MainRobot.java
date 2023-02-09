@@ -24,7 +24,7 @@ public class MainRobot extends SampleMecanumDrive{
         super(hardwareMap);
         slides = new Slides(hardwareMap, telemetry);
         grabber = new Grabber(hardwareMap,telemetry);
-        lighting = new Lighting(hardwareMap, telemetry);
+        lighting = new Lighting(hardwareMap);
 
     }
 

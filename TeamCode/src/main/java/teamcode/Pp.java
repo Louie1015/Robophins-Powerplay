@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.Map;
 
 import teamcode.Components.Lighting;
+import teamcode.Components.MainRobot;
+import teamcode.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
 
 class Ppbot{
     public DcMotor BLeft = null;
@@ -46,7 +48,7 @@ class Ppbot{
         Slider2 = maps.dcMotor.get("slider2");
         KTsensor = maps.get(ColorSensor.class, "Color");
         HorizontalTouch = map.get(TouchSensor.class, "Touch");
-        LedLight = map.get(Lighting.class, "blinkin");
+        LedLight = new Lighting(map);
 
         LedLight.blinkBlue();
 
@@ -95,6 +97,8 @@ public class Pp extends LinearOpMode{
 
     double pos1 = 0;
     double pos2 = 0;
+
+
 
     @Override
 
@@ -181,10 +185,16 @@ public class Pp extends LinearOpMode{
             robot.Slider1.setPower(Slidepos);
             robot.Slider2.setPower(Slidepos);
             robot.Hslide.setPower(Hpos);
-            if (isRed()) {
+
+            //led copium
+
+
+            if (isRed()|| isBlue() || isYellow()) {
                 robot.LedLight.blinkOrange();
+                telemetry.addData("ledOutPut","True");
             } else {
                 robot.LedLight.blinkBlue();
+                telemetry.addData("ledOutPut","False");
             }
 
 
@@ -231,9 +241,8 @@ public class Pp extends LinearOpMode{
     }
     public boolean isBlue() {
         return (robot.KTsensor.blue() > 35);
+    }public boolean isYellow() {
+        return (robot.KTsensor.blue() + robot.KTsensor.red() >= 60);
     }
-   /* public boolean isYellow() {
-        return (robot.KTsensor.)
-    }*/
 
 }

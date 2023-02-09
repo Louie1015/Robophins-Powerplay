@@ -11,13 +11,13 @@ public class Lighting {
 
     RevBlinkinLedDriver ledDriver;
 
-    public Lighting(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Lighting(HardwareMap hardwareMap) {
 
-        ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "ledDriver");
+        ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
 
     }
 
-    public void blinkOrange() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE); }
+    public void blinkOrange() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK); }
     public void blinkBlue() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE); }
     public void blinkYellow() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW); }
 

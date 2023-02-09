@@ -80,7 +80,7 @@ public class Pp extends LinearOpMode{
     final double Slidespeed = 1.0;
     final double Hspeed = 1.0;
     final double rotationScalar = 0.5;
-    final double speedScalar = 0.8;
+    final double speedScalar = 1.0;
     double drivespeed = 0.2;
     boolean closed = true;
 
@@ -163,11 +163,11 @@ public class Pp extends LinearOpMode{
                 closed = false;
             }
             if (closed) {
-                robot.Take1.setPosition(0.25);// take 1 closed pos
-                robot.Take2.setPosition(0.4);// take 2 closed pos
+                robot.Take1.setPosition(0.21);// take 1 closed pos
+                robot.Take2.setPosition(0.41);// take 2 closed pos
             } else {
-                robot.Take1.setPosition(0.08);// take 1 open pos
-                robot.Take2.setPosition(0.61);// take 2 open pos
+                robot.Take1.setPosition(0.03);// take 1 open pos
+                robot.Take2.setPosition(0.63);// take 2 open pos
             }
             //set power and position for grabby and shit
             robot.Slider1.setPower(Slidepos);

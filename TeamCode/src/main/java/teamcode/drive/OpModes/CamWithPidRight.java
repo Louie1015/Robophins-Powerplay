@@ -15,8 +15,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous
 public class CamWithPidRight extends LinearOpMode{
     private Cammy camlyn;
-    public static double firstleftdist = 20.75;
-    public static double firstcycleright = 9.5;
+    public static double firstleftdist = 21.75;
+    public static double firstcycleright = 10.5;
 
 
     OpenCvCamera webcam;
@@ -107,7 +107,7 @@ public class CamWithPidRight extends LinearOpMode{
         drop1();
         //park into right sector (Magenta)
         Trajectory magentaTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeRight(34)
+                .strafeRight(35)
                 .build();
         mainRobot.followTrajectory(magentaTraj1);
     }

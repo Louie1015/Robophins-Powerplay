@@ -55,7 +55,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
-                .forward(20)
+                .forward(18)
                 .build();
 
         Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
@@ -63,7 +63,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
-                .back(34)
+                .back(33.5)
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
@@ -75,7 +75,6 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         waitForStart();
-        int step = 0;
         mainRobot.grabber.closeGrabber();
         mainRobot.pause(800);
         mainRobot.slides.setSlidesPower(1.0);
@@ -85,18 +84,16 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.pause(200);
         mainRobot.followTrajectory(firstForward); // GO FORWARD
         mainRobot.pause(200);
-        step += 1;
-        telemetry.addData("It works","YES" + step); telemetry.update();
+
         mainRobot.followTrajectory(firstLeft); // GO LEFT
-        step += 1;
-        telemetry.addData("It works", "MAYBE" + step); telemetry.update();
+
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
         mainRobot.pause(2600); // TIME TO GET TO TOP
         mainRobot.followTrajectory(creep); // CREEP FORWARDS
-        step += 1;
-        telemetry.addData("It works", "NO" + step); telemetry.update();
+
+        mainRobot.pause(2000);
         mainRobot.grabber.openGrabber(); //DROP CONE
-        mainRobot.pause(700);
+        mainRobot.pause(1000);
         mainRobot.followTrajectory(backcreep); // go backwards so you can close
         mainRobot.slides.setSlidesPower(-0.3); // GO DOWN WHILE OPEN
         mainRobot.pause(1800);
@@ -118,20 +115,20 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.followTrajectory(cyclecreep);// go forward while open
         mainRobot.grabber.closeGrabber();// grab it
         mainRobot.pause(500);
-        mainRobot.slides.setSlidesPower(1.0);
+        mainRobot.slides.setSlidesPower(1.0); // take it off
         mainRobot.pause(300);
-        mainRobot.slides.setSlidesPower(0.05);
-        mainRobot.followTrajectory(backcycle);
+        mainRobot.slides.setSlidesPower(0.05); //hold
+        mainRobot.followTrajectory(backcycle); //go back to pole
         mainRobot.pause(200);
-        mainRobot.followTrajectorySequence(turn2);
+        mainRobot.followTrajectorySequence(turn2); //turn
         mainRobot.pause(200);
-        mainRobot.slides.setSlidesPower(1.0);
+        mainRobot.slides.setSlidesPower(1.0);// lift
+        mainRobot.pause(2600);
+        mainRobot.followTrajectory(cyclecreep2); //creep
         mainRobot.pause(2000);
-        mainRobot.followTrajectory(cyclecreep2);
-        mainRobot.pause(300);
-        mainRobot.grabber.openGrabber();
+        mainRobot.grabber.openGrabber(); // drop cone
         mainRobot.pause(600);
-        mainRobot.slides.setSlidesPower(-0.3);
+        mainRobot.slides.setSlidesPower(-0.3); // drop
         mainRobot.pause(1800);
 
 

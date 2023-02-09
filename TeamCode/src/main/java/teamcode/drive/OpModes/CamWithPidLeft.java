@@ -13,10 +13,10 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous
-public class CamWithPidRight extends LinearOpMode{
+public class CamWithPidLeft extends LinearOpMode{
     private Cammy camlyn;
-    public static double firstleftdist = 21.75;
-    public static double firstcycleright = 10.5;
+    public static double firstrightdist = 20.75;
+    public static double firstcycleleft = 15.5;
 
 
     OpenCvCamera webcam;
@@ -53,11 +53,11 @@ public class CamWithPidRight extends LinearOpMode{
 
             }
         });
+
         int sleeveStage = Cammy.truePath;
         telemetry.addData("Path: ", camlyn.getPosition());
         telemetry.update();
         waitForStart();
-
         while(opModeIsActive()) {
 
             // if you want code to run before we check which sleeve is detected(ex:close grabber on startup), run it here
@@ -89,7 +89,7 @@ public class CamWithPidRight extends LinearOpMode{
         drop1();
         //park into left sector (Yellow)
         Trajectory yellowTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(12)
+                .strafeLeft(35)
                 .build();
         mainRobot.followTrajectory(yellowTraj1);
     }
@@ -98,7 +98,7 @@ public class CamWithPidRight extends LinearOpMode{
         drop1();
         //park into middle sector (Blue)
         Trajectory blueTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeRight(12)
+                .strafeLeft(15)
                 .build();
         mainRobot.followTrajectory(blueTraj1);
     }
@@ -107,7 +107,7 @@ public class CamWithPidRight extends LinearOpMode{
         drop1();
         //park into right sector (Magenta)
         Trajectory magentaTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeRight(35)
+                .strafeRight(15)
                 .build();
         mainRobot.followTrajectory(magentaTraj1);
     }
@@ -116,7 +116,7 @@ public class CamWithPidRight extends LinearOpMode{
         mainRobot.setPoseEstimate(startPose);
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(startPose)
-                .strafeLeft(firstleftdist)
+                .strafeLeft(firstrightdist)
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstLeft.end())
@@ -124,7 +124,7 @@ public class CamWithPidRight extends LinearOpMode{
                 .build();
 
         Trajectory firstRight = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeRight(firstcycleright)
+                .strafeRight(firstcycleleft)
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstRight.end())
@@ -173,3 +173,4 @@ public class CamWithPidRight extends LinearOpMode{
     } //this is similar to BlueRight
 
 }
+

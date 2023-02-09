@@ -13,7 +13,7 @@ public class Lighting {
 
     public Lighting(HardwareMap hardwareMap, Telemetry telemetry) {
 
-        ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "ledDriver");
+        ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
 
     }
 

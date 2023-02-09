@@ -63,7 +63,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
-                .back(36)
+                .back(34)
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
@@ -130,7 +130,7 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.followTrajectory(cyclecreep2);
         mainRobot.pause(300);
         mainRobot.grabber.openGrabber();
-        mainRobot.pause(500);
+        mainRobot.pause(600);
         mainRobot.slides.setSlidesPower(-0.3);
         mainRobot.pause(1800);
 

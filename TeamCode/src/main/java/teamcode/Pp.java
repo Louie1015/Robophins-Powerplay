@@ -97,6 +97,7 @@ public class Pp extends LinearOpMode{
 
     double pos1 = 0;
     double pos2 = 0;
+    boolean wasPressedLastTick = false;
 
 
 
@@ -155,6 +156,12 @@ public class Pp extends LinearOpMode{
             //uppy downy. <- NOT DOWNY madge <- YES DOWNY WE HAVE RETRACTION NOW
 
             Hpos = 0.0;
+            if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum
+                Hpos -= 0.05 ;
+                wasPressedLastTick = true;
+            } else if (!robot.HorizontalTouch.isPressed()) {
+                wasPressedLastTick = false;
+            }
             if ((gamepad2.y || gamepad1.y) && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
                 Hpos += Hspeed;
             else if (gamepad1.a || gamepad2.a)

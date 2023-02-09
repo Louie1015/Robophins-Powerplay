@@ -18,7 +18,7 @@ public class BlueLeft extends LinearOpMode{
 
     MainRobot mainRobot;
     public static double firstrightdist = 20.75;
-    public static double firstcycleleft = 15;
+    public static double firstcycleleft = 15.5;
     public static double slidepower = 1.0;
 
 
@@ -106,20 +106,20 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.pause(1000);*/
    //     mainRobot.grabber.closeGrabber();// CLOSE
    //     mainRobot.pause(300);
-        mainRobot.followTrajectorySequence(strafeLeft1);
+        mainRobot.followTrajectorySequence(strafeLeft1); // left 1 tile
         mainRobot.pause(200);
-        mainRobot.followTrajectorySequence(turn1);
+        mainRobot.followTrajectorySequence(turn1); // turn ccw
         mainRobot.pause(200);
-        mainRobot.followTrajectory(cycleforward);
+        mainRobot.followTrajectory(cycleforward); // go to stack
         mainRobot.pause(200);
+        mainRobot.slides.setSlidesPower(1.0); // slide up
+        mainRobot.pause(300);
+        mainRobot.slides.setSlidesPower(0.05); // hold up
+        mainRobot.followTrajectory(cyclecreep);// go forward while open
+        mainRobot.grabber.closeGrabber();// grab it
+        mainRobot.pause(500);
         mainRobot.slides.setSlidesPower(1.0);
-        mainRobot.pause(500);
-        mainRobot.slides.setSlidesPower(0.0);
-        mainRobot.followTrajectory(cyclecreep);
-        mainRobot.grabber.closeGrabber();
-        mainRobot.pause(500);
-        mainRobot.slides.setSlidesPower(1.0);
-        mainRobot.pause(500);
+        mainRobot.pause(300);
         mainRobot.slides.setSlidesPower(0.05);
         mainRobot.followTrajectory(backcycle);
         mainRobot.pause(200);

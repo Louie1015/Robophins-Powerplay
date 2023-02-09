@@ -1,16 +1,20 @@
 package teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Light;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
 import java.util.Map;
+
+import teamcode.Components.Lighting;
 
 class Ppbot{
     public DcMotor BLeft = null;
@@ -26,6 +30,8 @@ class Ppbot{
     public ColorSensor KTsensor = null;
     public TouchSensor HorizontalTouch = null;
     HardwareMap map = null;
+    public Lighting LedLight;
+
 
     public void init(HardwareMap maps) {
         map = maps;
@@ -40,6 +46,9 @@ class Ppbot{
         Slider2 = maps.dcMotor.get("slider2");
         KTsensor = maps.get(ColorSensor.class, "Color");
         HorizontalTouch = map.get(TouchSensor.class, "Touch");
+        LedLight = map.get(Lighting.class, "blinkin");
+
+        LedLight.blinkBlue();
 
         BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         BRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -102,7 +111,6 @@ public class Pp extends LinearOpMode{
             y = -gamepad1.left_stick_y;
             x = gamepad1.left_stick_x;
             rx = gamepad1.right_stick_x;
-
 
             //if not turning, do a little driving.
             if (gamepad1.dpad_up)
@@ -173,6 +181,11 @@ public class Pp extends LinearOpMode{
             robot.Slider1.setPower(Slidepos);
             robot.Slider2.setPower(Slidepos);
             robot.Hslide.setPower(Hpos);
+            if (isRed()) {
+                robot.LedLight.blinkOrange();
+            } else {
+                robot.LedLight.blinkBlue();
+            }
 
 
 
@@ -212,5 +225,15 @@ public class Pp extends LinearOpMode{
     public void moveBackward() {
         y = -0.2;
     }
+
+    public boolean isRed() {
+        return (robot.KTsensor.red() > 35);
+    }
+    public boolean isBlue() {
+        return (robot.KTsensor.blue() > 35);
+    }
+   /* public boolean isYellow() {
+        return (robot.KTsensor.)
+    }*/
 
 }

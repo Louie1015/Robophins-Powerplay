@@ -21,5 +21,10 @@ public class Lighting {
     public void blinkBlue() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA); }
     public void blinkYellow() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW); }
 
+    public void blinkMagenta() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET); }
+
+    public void blinkCyan() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN); }
+
+
 }
 

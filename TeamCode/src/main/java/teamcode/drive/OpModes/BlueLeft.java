@@ -17,8 +17,6 @@ import teamcode.trajectorysequence.TrajectorySequence;
 public class BlueLeft extends LinearOpMode{
 
     MainRobot mainRobot;
-    public static double firstrightdist = 20.75;
-    public static double firstcycleleft = 16.6;
     public static double slidepower = 1.0;
 
 
@@ -29,7 +27,7 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.setPoseEstimate(startPose);
 
         Trajectory firstRight = mainRobot.trajectoryBuilder(startPose)
-                .strafeRight(firstrightdist)
+                .strafeRight(21.5)
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
@@ -37,11 +35,11 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeLeft(firstcycleleft)
+                .strafeLeft(14.5)
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
-                .forward(4)
+                .forward(3)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
@@ -53,15 +51,15 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
-                .forward(32)
+                .forward(31 )
                 .build();
 
         Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
-                .forward(2.5)
+                .forward(3.5)
                 .build();
 
         Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
-                .back(37)
+                .back(33)
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
@@ -70,6 +68,9 @@ public class BlueLeft extends LinearOpMode{
 
         Trajectory cyclecreep2 = mainRobot.trajectoryBuilder(turn2.end())
                 .forward(3)
+                .build();
+        Trajectory cyclebackcreep = mainRobot.trajectoryBuilder(creep.end())
+                .back(3)
                 .build();
 
         waitForStart();
@@ -115,7 +116,7 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.grabber.openGrabber(); // drop cone
         mainRobot.pause(200);
         mainRobot.slides.setSlidesPower(-0.3); // drop
-        mainRobot.pause(1800);
+        mainRobot.followTrajectory(cyclebackcreep); // get ready to park
 
 
 

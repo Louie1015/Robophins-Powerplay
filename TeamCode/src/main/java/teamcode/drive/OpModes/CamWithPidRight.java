@@ -9,14 +9,15 @@ import org.openftc.easyopencv.OpenCvCamera;
 
 import teamcode.Components.MainRobot;
 import teamcode.Components.Cammy;
+import teamcode.trajectorysequence.TrajectorySequence;
+
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous
 public class CamWithPidRight extends LinearOpMode{
     private Cammy camlyn;
-    public static double firstleftdist = 21.75;
-    public static double firstcycleright = 10.5;
+
 
 
     OpenCvCamera webcam;
@@ -53,22 +54,24 @@ public class CamWithPidRight extends LinearOpMode{
 
             }
         });
-        int sleeveStage = Cammy.truePath;
-        telemetry.addData("Path: ", camlyn.getPosition());
-        telemetry.update();
+
         waitForStart();
-
         while(opModeIsActive()) {
-
+            int sleeveStage = Cammy.truePath;
+            telemetry.addData("Path: ", camlyn.getPosition());
+            telemetry.update();
             // if you want code to run before we check which sleeve is detected(ex:close grabber on startup), run it here
 
             if(sleeveStage == 1){
+                mainRobot.lighting.blinkYellow();
                 Path1();
                 break;
             }else if(sleeveStage == 2){
+                mainRobot.lighting.blinkCyan();
                 Path2();
                 break;
             }else if(sleeveStage == 3){
+                mainRobot.lighting.blinkMagenta();
                 Path3();
                 break;
             }
@@ -91,6 +94,7 @@ public class CamWithPidRight extends LinearOpMode{
         Trajectory yellowTraj1 = mainRobot.trajectoryBuilder(tempPose)
                 .strafeLeft(12)
                 .build();
+        mainRobot.slides.setSlidesPower(0.0);
         mainRobot.followTrajectory(yellowTraj1);
     }
 
@@ -100,6 +104,7 @@ public class CamWithPidRight extends LinearOpMode{
         Trajectory blueTraj1 = mainRobot.trajectoryBuilder(tempPose)
                 .strafeRight(12)
                 .build();
+        mainRobot.slides.setSlidesPower(0.0);
         mainRobot.followTrajectory(blueTraj1);
     }
 
@@ -107,8 +112,9 @@ public class CamWithPidRight extends LinearOpMode{
         drop1();
         //park into right sector (Magenta)
         Trajectory magentaTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeRight(35)
+                .strafeRight(36)
                 .build();
+        mainRobot.slides.setSlidesPower(0.0);
         mainRobot.followTrajectory(magentaTraj1);
     }
     public void drop1() {
@@ -116,7 +122,7 @@ public class CamWithPidRight extends LinearOpMode{
         mainRobot.setPoseEstimate(startPose);
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(startPose)
-                .strafeLeft(firstleftdist)
+                .strafeLeft(21.5)
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstLeft.end())
@@ -124,52 +130,90 @@ public class CamWithPidRight extends LinearOpMode{
                 .build();
 
         Trajectory firstRight = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeRight(firstcycleright)
+                .strafeRight(9.2)
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstRight.end())
-                .forward(3)
+                .forward(3.25)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
-                .back(4)
+                .back(4.25)
                 .build();
-        mainRobot.grabber.closeGrabber(); // close on init
-        mainRobot.pause(800);
 
+        TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
+                .turn(Math.toRadians(-90))
+                .build();
 
-        mainRobot.slides.setSlidesPower(1.0); // lift so it doesnt fall
+        Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
+                .forward(28.25)
+                .build();
+
+        Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
+                .forward(3)
+                .build();
+
+        Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
+                .back(34)
+                .build();
+
+        TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
+                .turn(Math.toRadians(90))
+                .build();
+
+        Trajectory cyclecreep2 = mainRobot.trajectoryBuilder(turn2.end())
+                .forward(3)
+                .build();
+        Trajectory cyclebackcreep = mainRobot.trajectoryBuilder(creep.end())
+                .back(3)
+                .build();
+
+        mainRobot.grabber.closeGrabber();
+        mainRobot.pause(600);
+        mainRobot.slides.setSlidesPower(1.0);
         mainRobot.pause(300);
-
-
-        mainRobot.slides.setSlidesPower(0.0); // make sure it stops going up
-        mainRobot.followTrajectory(firstLeft); // GO LEFT
-
-        mainRobot.pause(200);
+        mainRobot.slides.setSlidesPower(0.0);
+        mainRobot.followTrajectory(firstLeft); // GO RIGHT
         mainRobot.followTrajectory(firstForward); // GO FORWARD
-
-
-        mainRobot.pause(200);
-
-        mainRobot.followTrajectory(firstRight); // GO RIGHT
-
-
+        mainRobot.followTrajectory(firstRight); // GO LEFT
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
-        mainRobot.pause(2600); // TIME TO GET TO TOP
+        mainRobot.pause(2000); // TIME TO GET TO TOP
         mainRobot.followTrajectory(creep); // CREEP FORWARDS
-
         mainRobot.grabber.openGrabber(); //DROP CONE
-        mainRobot.pause(700);
+        mainRobot.pause(200);
         mainRobot.followTrajectory(backcreep); // go backwards so you can close
-        mainRobot.slides.setSlidesPower(-0.4); // GO DOWN WHILE OPEN
-        mainRobot.pause(1800);
-        mainRobot.slides.setSlidesPower(-0.7);//MAKE SURE U ACTUALLY GO DOWN
+        mainRobot.slides.setSlidesPower(-1.0); // GO DOWN WHILE OPEN
+        mainRobot.pause(700);
+        /*mainRobot.slides.setSlidesPower(-0.7);//MAKE SURE U ACTUALLY GO DOWN
         mainRobot.pause(500);
-        /*mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
+        mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
         mainRobot.pause(1000);*/
-        mainRobot.grabber.closeGrabber();// CLOSE
-        mainRobot.pause(300);
-        tempPose = backcreep.end();
-    } //this is similar to BlueRight
+        //     mainRobot.grabber.closeGrabber();// CLOSE
+        //     mainRobot.pause(300);
+
+        // CYCLE CODE
+        mainRobot.followTrajectorySequence(turn1); // turn ccw
+        mainRobot.slides.setSlidesPower(1.0); // slide up
+        mainRobot.pause(220);
+        mainRobot.slides.setSlidesPower(0.05); // hold up
+        mainRobot.followTrajectory(cycleforward); // go to stack
+        mainRobot.followTrajectory(cyclecreep);// go forward while open
+        mainRobot.grabber.closeGrabber();// grab it
+        mainRobot.pause(200);
+        mainRobot.slides.setSlidesPower(1.0); // take it off
+        mainRobot.pause(400);
+        mainRobot.slides.setSlidesPower(0.05); //hold
+        mainRobot.followTrajectory(backcycle); //go back to pole
+        mainRobot.followTrajectorySequence(turn2); //turn
+        mainRobot.slides.setSlidesPower(1.0);// lift
+        mainRobot.pause(2000);
+        mainRobot.slides.setSlidesPower(0.05);
+        mainRobot.followTrajectory(cyclecreep2); //creep
+        mainRobot.grabber.openGrabber(); // drop cone
+        mainRobot.pause(200);
+        mainRobot.slides.setSlidesPower(-1.0); // drop
+        mainRobot.followTrajectory(cyclebackcreep); // get ready to park
+        tempPose = cyclebackcreep.end();
+    }
 
 }

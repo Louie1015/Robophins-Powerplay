@@ -156,12 +156,12 @@ public class Pp extends LinearOpMode{
             //uppy downy. <- NOT DOWNY madge <- YES DOWNY WE HAVE RETRACTION NOW
 
             Hpos = 0.0;
-            if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum
+            /*if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum CAUSES MASSIVE BUGS DO NOT UNCOMMENT UNTIL WE KNOW WHATS WRONG
                 Hpos -= 0.05 ;
                 wasPressedLastTick = true;
             } else if (!robot.HorizontalTouch.isPressed()) {
                 wasPressedLastTick = false;
-            }
+            }*/
             if ((gamepad2.y || gamepad1.y) && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
                 Hpos += Hspeed;
             else if (gamepad1.a || gamepad2.a)
@@ -249,7 +249,7 @@ public class Pp extends LinearOpMode{
     public boolean isBlue() {
         return (robot.KTsensor.blue() > 35);
     }public boolean isYellow() {
-        return (robot.KTsensor.blue() + robot.KTsensor.red() >= 60);
+        return (robot.KTsensor.blue() + robot.KTsensor.red() >= 50);
     }
 
 }

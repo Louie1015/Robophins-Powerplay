@@ -93,18 +93,23 @@ public class CamWithPidLeft extends LinearOpMode{
         drop1();
         //park into left sector (Yellow)
         Trajectory yellowTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(35.5)
+                .strafeLeft(37)
                 .build();
+
         mainRobot.followTrajectory(yellowTraj1);
+        mainRobot.slides.setSlidesPower(0.0);
+
     }
 
     public void Path2(){
         drop1();
         //park into middle sector (Blue)
         Trajectory blueTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(15)
+                .strafeLeft(14)
                 .build();
         mainRobot.followTrajectory(blueTraj1);
+        mainRobot.slides.setSlidesPower(0.0);
+
     }
 
     public void Path3(){
@@ -114,6 +119,8 @@ public class CamWithPidLeft extends LinearOpMode{
                 .strafeRight(15)
                 .build();
         mainRobot.followTrajectory(magentaTraj1);
+        mainRobot.slides.setSlidesPower(0.0);
+
     }
     public void drop1() {
         Pose2d startPose = new Pose2d(-34, 70, Math.toRadians(-90));
@@ -148,11 +155,11 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
-                .forward(4)
+                .forward(3.5)
                 .build();
 
         Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
-                .back(33)
+                .back(32.5)
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
@@ -160,7 +167,7 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory cyclecreep2 = mainRobot.trajectoryBuilder(turn2.end())
-                .forward(2.2)
+                .forward(2.4)
                 .build();
         Trajectory cyclebackcreep = mainRobot.trajectoryBuilder(cyclecreep2.end())
                 .back(3)
@@ -180,8 +187,8 @@ public class CamWithPidLeft extends LinearOpMode{
         mainRobot.grabber.openGrabber(); //DROP CONE
         mainRobot.pause(200);
         mainRobot.followTrajectory(backcreep); // go backwards so you can close
-        mainRobot.slides.setSlidesPower(-0.3); // GO DOWN WHILE OPEN
-        mainRobot.pause(1400);
+        mainRobot.slides.setSlidesPower(-1.0); // GO DOWN WHILE OPEN
+        mainRobot.pause(700);
         /*mainRobot.slides.setSlidesPower(-0.7);//MAKE SURE U ACTUALLY GO DOWN
         mainRobot.pause(500);
         mainRobot.slides.setSlidesPower(0.1); //  MAKE SURE SPOOL IS TAUGHT
@@ -207,7 +214,7 @@ public class CamWithPidLeft extends LinearOpMode{
         mainRobot.followTrajectory(cyclecreep2); //creep
         mainRobot.grabber.openGrabber(); // drop cone
         mainRobot.pause(200);
-        mainRobot.slides.setSlidesPower(-0.3); // drop
+        mainRobot.slides.setSlidesPower(-1.0); // drop
         mainRobot.followTrajectory(cyclebackcreep); // get ready to park
         tempPose = cyclebackcreep.end();
     }

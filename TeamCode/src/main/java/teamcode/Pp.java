@@ -5,12 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Light;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Map;
 
@@ -30,6 +33,7 @@ class Ppbot{
     public Servo Take2 = null;
 
     public ColorSensor KTsensor = null;
+    public DistanceSensor BMsensor = null;
     public TouchSensor HorizontalTouch = null;
     HardwareMap map = null;
     public Lighting LedLight;
@@ -47,6 +51,7 @@ class Ppbot{
         Slider1 = maps.dcMotor.get("slider1");
         Slider2 = maps.dcMotor.get("slider2");
         KTsensor = maps.get(ColorSensor.class, "Color");
+        BMsensor = maps.get(DistanceSensor.class, "Color");
         HorizontalTouch = map.get(TouchSensor.class, "Touch");
         LedLight = new Lighting(map);
 
@@ -90,14 +95,14 @@ public class Pp extends LinearOpMode{
     final double Armspeed = 0.1;
     final double Slidespeed = 1.0;
     final double Hspeed = 1.0;
-    final double rotationScalar = 0.5;
-    final double speedScalar = 1.0;
+    final double rotationScalar = 0.35;
+    final double speedScalar = 0.5;
     double drivespeed = 0.2;
     boolean closed = true;
 
     double pos1 = 0;
     double pos2 = 0;
-    boolean wasPressedLastTick = false;
+    boolean wasPressedLastTick = true;
 
 
 
@@ -119,13 +124,13 @@ public class Pp extends LinearOpMode{
 
             //if not turning, do a little driving.
             if (gamepad1.dpad_up)
-                y = 0.25;
+                y = 0.41;
             if (gamepad1.dpad_down)
-                y = -0.25;
+                y = -0.41;
             if (gamepad1.dpad_left)
-                x = -0.3;
+                x = -0.6;
             if (gamepad1.dpad_right)
-                x = 0.3;
+                x = 0.6;
             if (Math.abs(rx) > 0.03){
                 robot.BLeft.setPower(rotationScalar * -rx);
                 robot.BRight.setPower(rotationScalar * -rx);
@@ -134,18 +139,18 @@ public class Pp extends LinearOpMode{
             }
             // if we want to go foward/back do a little motor powering
             else if (Math.abs(y) >= Math.abs(x) && Math.abs(y) > 0.03){
-                robot.BLeft.setPower(speedScalar * -y * 0.7); //-
-                robot.BRight.setPower(speedScalar * y * 0.7);
-                robot.FLeft.setPower(speedScalar * y * 0.85); //-
+                robot.BLeft.setPower(speedScalar * -y/*0.7*/); //-
+                robot.BRight.setPower(speedScalar * y/*0.7*/);
+                robot.FLeft.setPower(speedScalar * y/*0.85*/); //-
                 robot.FRight.setPower(speedScalar * y); //0
 
             }
             //if we want to go strafing, set a little moter powerfing for strafing
             else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03){
-                robot.BLeft.setPower(speedScalar * x * 0.7 *1.4 /* the 1.4 is for post-new drivebase, for refrence later*/);
-                robot.BRight.setPower(speedScalar * x * 0.7*1.4);
-                robot.FLeft.setPower(speedScalar * x * 0.85);
-                robot.FRight.setPower(speedScalar * -x);
+                robot.BLeft.setPower(speedScalar * x/* (0.7 * 1.4)the 1.4 is for post-new drivebase, for refrence later*/);
+                robot.BRight.setPower(speedScalar * x /*(0.7 * 1.4)*/);
+                robot.FLeft.setPower(speedScalar * x * 0.9 /*0.85*/);
+                robot.FRight.setPower(speedScalar * 0.9 * -x);
                 //if we dont want to move make sure we dont move
             } else {
                 robot.BLeft.setPower(0);
@@ -156,12 +161,12 @@ public class Pp extends LinearOpMode{
             //uppy downy. <- NOT DOWNY madge <- YES DOWNY WE HAVE RETRACTION NOW
 
             Hpos = 0.0;
-            /*if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum CAUSES MASSIVE BUGS DO NOT UNCOMMENT UNTIL WE KNOW WHATS WRONG
+            if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum CAUSES MASSIVE BUGS DO NOT UNCOMMENT UNTIL WE KNOW WHATS WRONG
                 Hpos -= 0.05 ;
                 wasPressedLastTick = true;
             } else if (!robot.HorizontalTouch.isPressed()) {
                 wasPressedLastTick = false;
-            }*/
+            }
             if ((gamepad2.y || gamepad1.y) && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
                 Hpos += Hspeed;
             else if (gamepad1.a || gamepad2.a)
@@ -196,7 +201,7 @@ public class Pp extends LinearOpMode{
             //led copium
 
 
-            if (isRed()|| isBlue() || isYellow()) {
+            if (isRed()|| isBlue() || isYellow() || isClose()) {
                 robot.LedLight.blinkOrange();
                 telemetry.addData("ledOutPut","True");
             } else {
@@ -211,10 +216,12 @@ public class Pp extends LinearOpMode{
             telemetry.addData("y","%.2f", y);
             telemetry.addData("servo1","%.2f", robot.Take1.getPosition());
             telemetry.addData("servo2","%.2f", robot.Take2.getPosition()); // REMEMBER TO CONFIGURE THIS ON PHONE
-            //color sensor telemetry
+            //color sensor telemetry NOT ACTIVATED
             telemetry.addData("Red", robot.KTsensor.red());
             telemetry.addData("Green", robot.KTsensor.green());
             telemetry.addData("Blue", robot.KTsensor.blue());
+            //distance sensor telemetry
+            telemetry.addData("Distance (cm)", "%.02f", robot.BMsensor.getDistance(DistanceUnit.CM));
             //limit switch telemetry
             if (true) {
                 telemetry.addData("LimitSwitch", robot.HorizontalTouch.getValue());
@@ -244,12 +251,24 @@ public class Pp extends LinearOpMode{
     }
 
     public boolean isRed() {
-        return (robot.KTsensor.red() > 35);
+        int red = robot.KTsensor.red();
+        int blue = robot.KTsensor.blue();
+        int green = robot.KTsensor.green();
+        return (red > 25 && red - blue >3);
     }
     public boolean isBlue() {
-        return (robot.KTsensor.blue() > 35);
+        int red = robot.KTsensor.red();
+        int blue = robot.KTsensor.blue();
+        int green = robot.KTsensor.green();
+        return (blue > 25 && blue - red >3);
     }public boolean isYellow() {
-        return (robot.KTsensor.blue() + robot.KTsensor.red() >= 50);
+        int red = robot.KTsensor.red();
+        int blue = robot.KTsensor.blue();
+        int green = robot.KTsensor.green();
+        return (blue + red >= 50 || (blue+red)/2 > green);
     }
 
+    public boolean isClose() {
+        return 100 >= robot.BMsensor.getDistance(DistanceUnit.CM);
+    }
 }

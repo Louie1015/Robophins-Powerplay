@@ -51,7 +51,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
-                .forward(31 )
+                .forward(30.5 )
                 .build();
 
         Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
@@ -74,6 +74,7 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         waitForStart();
+        mainRobot.grabber.closeGrabber();
         mainRobot.grabber.closeGrabber();
         mainRobot.pause(600);
         mainRobot.slides.setSlidesPower(1.0);

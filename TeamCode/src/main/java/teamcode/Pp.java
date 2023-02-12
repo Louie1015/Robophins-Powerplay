@@ -178,7 +178,7 @@ public class Pp extends LinearOpMode{
                 Slidepos += Slidespeed / 8;
             }
             if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {// downy
-                Slidepos -= Slidespeed / 4;
+                Slidepos -= Slidespeed / 3;
             }
             //open close :)
             if (gamepad1.x || gamepad2.x) {

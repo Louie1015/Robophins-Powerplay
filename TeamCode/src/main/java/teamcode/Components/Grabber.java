@@ -13,8 +13,8 @@ public class Grabber {
 
     public static double openPos1 = 0.03;
     public static double openPos2 = 0.63;
-    public static double closePos1 = 0.21;
-    public static double closePos2 = 0.41;
+    public static double closePos1 = 0.20;
+    public static double closePos2 = 0.42;
 
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
         grabber1 = hardwareMap.get(Servo.class, "grabber");

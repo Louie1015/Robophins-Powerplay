@@ -93,7 +93,7 @@ public class CamWithPidLeft extends LinearOpMode{
         drop1();
         //park into left sector (Yellow)
         Trajectory yellowTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(37)
+                .strafeLeft(40)
                 .build();
 
         mainRobot.followTrajectory(yellowTraj1);
@@ -105,7 +105,7 @@ public class CamWithPidLeft extends LinearOpMode{
         drop1();
         //park into middle sector (Blue)
         Trajectory blueTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(14)
+                .strafeLeft(16)
                 .build();
         mainRobot.followTrajectory(blueTraj1);
         mainRobot.slides.setSlidesPower(0.0);
@@ -116,7 +116,7 @@ public class CamWithPidLeft extends LinearOpMode{
         drop1();
         //park into right sector (Magenta)
         Trajectory magentaTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeRight(15)
+                .strafeRight(16)
                 .build();
         mainRobot.followTrajectory(magentaTraj1);
         mainRobot.slides.setSlidesPower(0.0);
@@ -125,17 +125,20 @@ public class CamWithPidLeft extends LinearOpMode{
     public void drop1() {
         Pose2d startPose = new Pose2d(-34, 70, Math.toRadians(-90));
         mainRobot.setPoseEstimate(startPose);
+        Trajectory ff1 = mainRobot.trajectoryBuilder(startPose)
+                .forward(1)
+                .build();
 
-        Trajectory firstRight = mainRobot.trajectoryBuilder(startPose)
+        Trajectory firstRight = mainRobot.trajectoryBuilder(ff1.end())
                 .strafeRight(21.5)
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
-                .forward(46.5)
+                .forward(45.5)
                 .build();
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeLeft(14.75)
+                .strafeLeft(14.5)
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
@@ -143,7 +146,7 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
-                .back(4.2)
+                .back(4.4)
                 .build();
 
         TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
@@ -151,7 +154,7 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
-                .forward(31 )
+                .forward(31.5 )
                 .build();
 
         Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
@@ -159,7 +162,7 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
-                .back(32.5)
+                .back(33.5)
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())
@@ -174,10 +177,12 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         mainRobot.grabber.closeGrabber();
-        mainRobot.pause(600);
+        mainRobot.pause(500);
         mainRobot.slides.setSlidesPower(1.0);
-        mainRobot.pause(300);
+        mainRobot.pause(100);
+
         mainRobot.slides.setSlidesPower(0.0);
+        mainRobot.followTrajectory(ff1);
         mainRobot.followTrajectory(firstRight); // GO RIGHT
         mainRobot.followTrajectory(firstForward); // GO FORWARD
         mainRobot.followTrajectory(firstLeft); // GO LEFT

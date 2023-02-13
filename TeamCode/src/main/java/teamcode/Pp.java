@@ -81,6 +81,8 @@ class Ppbot{
         Slider2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Hslide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+
 }
 
 @TeleOp (name = "PowerPlaybot", group = "pp")
@@ -103,6 +105,9 @@ public class Pp extends LinearOpMode{
     double pos1 = 0;
     double pos2 = 0;
     boolean wasPressedLastTick = true;
+    boolean endOfAuto = false;
+    int ticksLeft= 0;
+    int stoppedTicks =0;
 
 
 
@@ -161,7 +166,7 @@ public class Pp extends LinearOpMode{
             //uppy downy. <- NOT DOWNY madge <- YES DOWNY WE HAVE RETRACTION NOW
 
             Hpos = 0.0;
-            if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum CAUSES MASSIVE BUGS DO NOT UNCOMMENT UNTIL WE KNOW WHATS WRONG
+            if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum
                 Hpos -= 0.05 ;
                 wasPressedLastTick = true;
             } else if (!robot.HorizontalTouch.isPressed()) {
@@ -172,9 +177,21 @@ public class Pp extends LinearOpMode{
             else if (gamepad1.a || gamepad2.a)
                 Hpos -= Hspeed ;
             Slidepos = 0.0;
+
+            if (gamepad1.left_bumper ||gamepad2.left_bumper || ticksLeft>0) { // press left bumper to initate auto ascend
+                Slidepos = 1;
+                ticksLeft = 1600; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP TODO: NEEDS TUNING
+                ticksLeft--;
+            }
+            if (ticksLeft == 0) {
+                stoppedTicks = 2000; // HOW MANY TICKS THE SLIDE IS STOPPED AFTERWARDS TODO: NEEDS TUNING
+            }
+            if (stoppedTicks > 0) {
+                endOfAuto = true;
+            }
             if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy
                 Slidepos += Slidespeed / 1.1;
-            if (gamepad1.right_bumper || gamepad2.right_bumper) { // stopper
+            if (gamepad1.right_bumper || gamepad2.right_bumper || endOfAuto) { // stopper
                 Slidepos += Slidespeed / 8;
             }
             if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {// downy
@@ -194,6 +211,12 @@ public class Pp extends LinearOpMode{
                 robot.Take2.setPosition(0.63);// take 2 open pos
             }
             //set power and position for grabby and shit
+            if (Slidepos>= 1) { // flooring everything above max motor output to 1
+                Slidepos = 1;
+            }
+            if (Hpos >= 1) {
+                Hpos =1;
+            }
             robot.Slider1.setPower(Slidepos);
             robot.Slider2.setPower(Slidepos);
             robot.Hslide.setPower(Hpos);

@@ -27,4 +27,12 @@ public class Slides {
         slider2.setPower(power);
     }
 
+    public void goToTopJunction(MainRobot MR) {
+        slider1.setPower(1.0);
+        slider2.setPower(1.0);
+        MR.pause(1600);
+        slider1.setPower(0.05);
+        slider2.setPower(0.05);
+    }
+
 }

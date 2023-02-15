@@ -105,9 +105,11 @@ public class Pp extends LinearOpMode{
     double pos1 = 0;
     double pos2 = 0;
     boolean wasPressedLastTick = true;
-    boolean endOfAuto = false;
+    boolean autosliding = false;
+    boolean nextPhase = false;
+    boolean holdie_cow = false;
     int ticksLeft= 0;
-    int stoppedTicks =0;
+    int ticksLeft2 = 0;
 
 
 
@@ -178,20 +180,31 @@ public class Pp extends LinearOpMode{
                 Hpos -= Hspeed ;
             Slidepos = 0.0;
 
-            if (gamepad1.left_bumper ||gamepad2.left_bumper || ticksLeft>0) { // press left bumper to initate auto ascend
-                Slidepos = 1;
-                ticksLeft = 1600; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP TODO: NEEDS TUNING
+            autosliding = false;
+            if (gamepad1.left_bumper ||gamepad2.left_bumper) { // press left bumper to initate auto ascend
+                ticksLeft = 15; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP TODO: NEEDS TUNING:  ticks are 5/sec approx.
+            }
+            if (ticksLeft>0) {
+                autosliding = true;
                 ticksLeft--;
+                if (ticksLeft ==0) {
+                    nextPhase = true;
+                }
             }
-            if (ticksLeft == 0) {
-                stoppedTicks = 2000; // HOW MANY TICKS THE SLIDE IS STOPPED AFTERWARDS TODO: NEEDS TUNING
+            holdie_cow = false;
+            if (nextPhase) { // press left bumper to initate auto ascend
+                ticksLeft2 = 15; //THIS VALUE IS HOW LONG THE SLIDES WILL STAY STILL TODO: NEEDS TUNING: ticks are 5/sec approx.
+                nextPhase = false;
             }
-            if (stoppedTicks > 0) {
-                endOfAuto = true;
+            if (ticksLeft2>0) {
+                holdie_cow = true;
+                ticksLeft2--;
             }
-            if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0) // uppy
+            telemetry.addData("ticksLeft",ticksLeft);
+
+            if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0 || autosliding) // uppy
                 Slidepos += Slidespeed / 1.1;
-            if (gamepad1.right_bumper || gamepad2.right_bumper || endOfAuto) { // stopper
+            if (gamepad1.right_bumper || gamepad2.right_bumper || holdie_cow) { // stopper
                 Slidepos += Slidespeed / 8;
             }
             if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {// downy

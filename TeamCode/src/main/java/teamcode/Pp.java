@@ -12,6 +12,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import teamcode.trajectorysequence.TrajectorySequence;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -88,7 +91,7 @@ class Ppbot{
 @TeleOp (name = "PowerPlaybot", group = "pp")
 
 public class Pp extends LinearOpMode{
-    Ppbot robot = new Ppbot();
+    MainRobot robot;
     double x;
     double y;
     double rx;
@@ -116,10 +119,18 @@ public class Pp extends LinearOpMode{
     @Override
 
     public void runOpMode(){
-        robot.init(hardwareMap);
+        robot = new MainRobot(hardwareMap, telemetry);
+
         telemetry.addData("Say", "Hello");
         telemetry.update();
-
+        //pid for auto
+        Pose2d startPose = robot.getPoseEstimate();
+        Trajectory ff1 = robot.trajectoryBuilder(startPose)
+                .back(15)
+                .build();
+        Trajectory bb1 = robot.trajectoryBuilder(ff1.end())
+                .forward(15)
+                .build();
         waitForStart();
 
         //while we balling
@@ -127,16 +138,21 @@ public class Pp extends LinearOpMode{
             // y = forward/back x = left strafe/right strafe, rx = rotation
             y = -gamepad1.left_stick_y;
             x = gamepad1.left_stick_x;
-            rx = gamepad1.right_stick_x;
+            // if l/r dpad, do a little rotating
+            if (gamepad1.dpad_left) {
+                rx=-1;
+            } else if (gamepad1.dpad_right) {
+                rx=1;
+            }
 
             //if not turning, do a little driving.
-            if (gamepad1.dpad_up)
+            if (gamepad1.right_stick_y >0.03)
                 y = 0.41;
-            if (gamepad1.dpad_down)
+            if (gamepad1.right_stick_y < -0.03)
                 y = -0.41;
-            if (gamepad1.dpad_left)
+            if (gamepad1.right_stick_x<-0.03)
                 x = -0.6;
-            if (gamepad1.dpad_right)
+            if (gamepad1.right_stick_x>0.03)
                 x = 0.6;
             if (Math.abs(rx) > 0.03){
                 robot.BLeft.setPower(rotationScalar * -rx);
@@ -144,8 +160,8 @@ public class Pp extends LinearOpMode{
                 robot.FLeft.setPower(rotationScalar * rx);
                 robot.FRight.setPower(rotationScalar * -rx);
             }
-            // if we want to go foward/back do a little motor powering
-            else if (Math.abs(y) >= Math.abs(x) && Math.abs(y) > 0.03){
+            // if we want to go foward/back AND WE ARE NOT ALREADY AUTOING do a little motor powering
+            else if (Math.abs(y) >= Math.abs(x) && Math.abs(y) > 0.03 && !autosliding) {
                 robot.BLeft.setPower(speedScalar * -y/*0.7*/); //-
                 robot.BRight.setPower(speedScalar * y/*0.7*/);
                 robot.FLeft.setPower(speedScalar * y/*0.85*/); //-
@@ -180,11 +196,18 @@ public class Pp extends LinearOpMode{
                 Hpos -= Hspeed ;
             Slidepos = 0.0;
 
-            autosliding = false;
-            if (gamepad1.left_bumper ||gamepad2.left_bumper) { // press left bumper to initate auto ascend
-                ticksLeft = 15; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP TODO: NEEDS TUNING:  ticks are 5/sec approx.
+            if (gamepad1.dpad_up) { //goes forward to pick up cone
+                robot.followTrajectory(bb1);
             }
-            if (ticksLeft>0) {
+
+            if (gamepad1.dpad_down) { //goes backwards  to place cone
+                robot.followTrajectory(ff1);
+                ////////////////////// DON'T UNDO COMMENTED STUFF UNTIL WE KNOW//////////////////////
+                //////////////////////////// F O R     S U R E /////////////////////////////////////
+                ///////////////////////////////WE DON'T NEED THEM////////////////////////////////////
+                //ticksLeft = 15; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP
+            }
+            /*if (ticksLeft>0) {
                 autosliding = true;
                 ticksLeft--;
                 if (ticksLeft ==0) {
@@ -193,14 +216,19 @@ public class Pp extends LinearOpMode{
             }
             holdie_cow = false;
             if (nextPhase) { // press left bumper to initate auto ascend
-                ticksLeft2 = 15; //THIS VALUE IS HOW LONG THE SLIDES WILL STAY STILL TODO: NEEDS TUNING: ticks are 5/sec approx.
+                ticksLeft2 = 25; //THIS VALUE IS HOW LONG THE SLIDES WILL STAY STILL
                 nextPhase = false;
             }
             if (ticksLeft2>0) {
                 holdie_cow = true;
                 ticksLeft2--;
+                if (ticksLeft2==0) {
+                    thirdphase = true;
+                }
             }
-            telemetry.addData("ticksLeft",ticksLeft);
+            if (thirdphase) {
+
+            }*/
 
             if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0 || autosliding) // uppy
                 Slidepos += Slidespeed / 1.1;
@@ -217,11 +245,11 @@ public class Pp extends LinearOpMode{
                 closed = false;
             }
             if (closed) {
-                robot.Take1.setPosition(0.21);// take 1 closed pos
-                robot.Take2.setPosition(0.41);// take 2 closed pos
+                robot.grabber.Take1.setPosition(0.21);// take 1 closed pos
+                robot.grabber.Take2.setPosition(0.41);// take 2 closed pos
             } else {
-                robot.Take1.setPosition(0.03);// take 1 open pos
-                robot.Take2.setPosition(0.63);// take 2 open pos
+                robot.grabber.Take1.setPosition(0.03);// take 1 open pos
+                robot.grabber.Take2.setPosition(0.63);// take 2 open pos
             }
             //set power and position for grabby and shit
             if (Slidepos>= 1) { // flooring everything above max motor output to 1
@@ -230,18 +258,18 @@ public class Pp extends LinearOpMode{
             if (Hpos >= 1) {
                 Hpos =1;
             }
-            robot.Slider1.setPower(Slidepos);
-            robot.Slider2.setPower(Slidepos);
-            robot.Hslide.setPower(Hpos);
+            robot.slides.slider1.setPower(Slidepos);
+            robot.slides.slider2.setPower(Slidepos);
+            robot.slides.Hslide.setPower(Hpos);
 
             //led copium
 
 
             if (isRed()|| isBlue() || isYellow() || isClose()) {
-                robot.LedLight.blinkOrange();
+                robot.lighting.blinkOrange();
                 telemetry.addData("ledOutPut","True");
             } else {
-                robot.LedLight.blinkBlue();
+                robot.lighting.blinkBlue();
                 telemetry.addData("ledOutPut","False");
             }
 
@@ -250,8 +278,8 @@ public class Pp extends LinearOpMode{
             //telemetry :nerd_emoji:
             telemetry.addData("x","%.2f", x);
             telemetry.addData("y","%.2f", y);
-            telemetry.addData("servo1","%.2f", robot.Take1.getPosition());
-            telemetry.addData("servo2","%.2f", robot.Take2.getPosition()); // REMEMBER TO CONFIGURE THIS ON PHONE
+            telemetry.addData("servo1","%.2f", robot.grabber.Take1.getPosition());
+            telemetry.addData("servo2","%.2f", robot.grabber.Take2.getPosition()); // REMEMBER TO CONFIGURE THIS ON PHONE
             //color sensor telemetry NOT ACTIVATED
             telemetry.addData("Red", robot.KTsensor.red());
             telemetry.addData("Green", robot.KTsensor.green());

@@ -10,8 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Slides {
 
-    private DcMotor slider1;
-    private DcMotor slider2;
+    public DcMotor slider1, slider2, Hslide;
 
     public Slides (HardwareMap hardwareMap, Telemetry telemetry) {
         slider1 = hardwareMap.get (DcMotor.class, "slider1");
@@ -20,6 +19,9 @@ public class Slides {
         slider2.setDirection(DcMotorSimple.Direction.FORWARD);
         slider1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slider2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        //HS
+        Hslide = hardwareMap.get(DcMotor.class, "hs");
     }
 
     public void setSlidesPower (double power) {

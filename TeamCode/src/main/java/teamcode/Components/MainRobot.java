@@ -3,7 +3,10 @@ package teamcode.Components;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ThreadPool;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.concurrent.ExecutorService;
@@ -19,12 +22,18 @@ public class MainRobot extends SampleMecanumDrive{
     public Slides slides;
     public Grabber grabber;
     public Lighting lighting;
+    public ColorSensor KTsensor;
+    public DistanceSensor BMsensor;
+    public TouchSensor HorizontalTouch;
 
     public MainRobot (HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
         slides = new Slides(hardwareMap, telemetry);
         grabber = new Grabber(hardwareMap,telemetry);
         lighting = new Lighting(hardwareMap);
+        KTsensor = hardwareMap.get(ColorSensor.class, "Color");
+        BMsensor = hardwareMap.get(DistanceSensor.class, "Color");
+        HorizontalTouch = hardwareMap.get(TouchSensor.class, "Touch");
 
     }
 

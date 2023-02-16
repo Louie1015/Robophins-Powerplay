@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Grabber {
     Servo grabber1;
     Servo grabber2;
+    public Servo Take1, Take2;
 
     public static double openPos1 = 0.03;
     public static double openPos2 = 0.63;
@@ -19,6 +20,8 @@ public class Grabber {
     public Grabber (HardwareMap hardwareMap, Telemetry telemetry) {
         grabber1 = hardwareMap.get(Servo.class, "grabber");
         grabber2 = hardwareMap.get(Servo.class, "grabber2");
+        Take1 = grabber1;
+        Take2 = grabber2;
 
     }
 

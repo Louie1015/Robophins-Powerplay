@@ -120,6 +120,8 @@ public class Pp extends LinearOpMode{
 
     public void runOpMode(){
         robot = new MainRobot(hardwareMap, telemetry);
+        robot.BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         telemetry.addData("Say", "Hello");
         telemetry.update();
@@ -138,22 +140,31 @@ public class Pp extends LinearOpMode{
             // y = forward/back x = left strafe/right strafe, rx = rotation
             y = -gamepad1.left_stick_y;
             x = gamepad1.left_stick_x;
+            rx = gamepad1.right_stick_x;
             // if l/r dpad, do a little rotating
-            if (gamepad1.dpad_left) {
+            /*if (gamepad1.dpad_left) {
                 rx=-1;
             } else if (gamepad1.dpad_right) {
                 rx=1;
-            }
+            }*/
 
             //if not turning, do a little driving.
-            if (gamepad1.right_stick_y >0.03)
-                y = 0.41;
-            if (gamepad1.right_stick_y < -0.03)
-                y = -0.41;
-            if (gamepad1.right_stick_x<-0.03)
-                x = -0.6;
-            if (gamepad1.right_stick_x>0.03)
-                x = 0.6;
+            /*if (Math.abs(gamepad1.right_stick_y) + Math.abs(gamepad1.right_stick_x) > 0.03){
+                if (Math.abs(gamepad1.right_stick_y) > Math.abs(gamepad1.right_stick_x)) {
+                    y = gamepad1.right_stick_y * -0.41;
+                } else {
+                    x = gamepad1.right_stick_x * 0.6;
+                }
+            }*/
+            if (gamepad1.dpad_up) {
+                y=0.41;
+            } else if (gamepad1.dpad_down) {
+                y=-0.41;
+            } else if (gamepad1.dpad_left) {
+                x=-0.6;
+            } else if (gamepad1.dpad_right) {
+                x=0.6;
+            }
             if (Math.abs(rx) > 0.03){
                 robot.BLeft.setPower(rotationScalar * -rx);
                 robot.BRight.setPower(rotationScalar * -rx);
@@ -191,22 +202,22 @@ public class Pp extends LinearOpMode{
                 wasPressedLastTick = false;
             }
             if ((gamepad2.y || gamepad1.y) && !(robot.HorizontalTouch.isPressed())) // if limit switch is not pressed
-                Hpos += Hspeed;
+                Hpos -= Hspeed;
             else if (gamepad1.a || gamepad2.a)
-                Hpos -= Hspeed ;
+                Hpos += Hspeed ;
             Slidepos = 0.0;
 
-            if (gamepad1.dpad_up) { //goes forward to pick up cone
+            if (gamepad1.left_bumper) { //goes forward to pick up cone
                 robot.followTrajectory(bb1);
             }
-
+            /*
             if (gamepad1.dpad_down) { //goes backwards  to place cone
                 robot.followTrajectory(ff1);
                 ////////////////////// DON'T UNDO COMMENTED STUFF UNTIL WE KNOW//////////////////////
                 //////////////////////////// F O R     S U R E /////////////////////////////////////
                 ///////////////////////////////WE DON'T NEED THEM////////////////////////////////////
                 //ticksLeft = 15; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP
-            }
+            }*/
             /*if (ticksLeft>0) {
                 autosliding = true;
                 ticksLeft--;

@@ -22,6 +22,10 @@ public class Slides {
 
         //HS
         Hslide = hardwareMap.get(DcMotor.class, "hs");
+        Hslide.setDirection(DcMotorSimple.Direction.FORWARD);
+        Hslide.setPower(0.0);
+        Hslide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     public void setSlidesPower (double power) {

@@ -24,7 +24,7 @@ import teamcode.Components.Lighting;
 import teamcode.Components.MainRobot;
 import teamcode.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
 
-class Ppbot{
+/*class Ppbot{ WE ARE NOT USING PPBOT
     public DcMotor BLeft = null;
     public DcMotor BRight = null;
     public DcMotor FLeft = null;
@@ -86,7 +86,7 @@ class Ppbot{
     }
 
 
-}
+}*/
 
 @TeleOp (name = "PowerPlaybot", group = "pp")
 
@@ -120,23 +120,24 @@ public class Pp extends LinearOpMode{
 
     public void runOpMode(){
         robot = new MainRobot(hardwareMap, telemetry);
-        robot.BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        //robot.BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         telemetry.addData("Say", "Hello");
         telemetry.update();
         //pid for auto
         Pose2d startPose = robot.getPoseEstimate();
-        Trajectory ff1 = robot.trajectoryBuilder(startPose)
-                .back(15)
-                .build();
-        Trajectory bb1 = robot.trajectoryBuilder(startPose)
-                .forward(15)
-                .build();
         waitForStart();
 
         //while we balling
         while(opModeIsActive()){
+            startPose = robot.getPoseEstimate();
+            Trajectory ff1 = robot.trajectoryBuilder(startPose)
+                    .back(15)
+                    .build();
+            Trajectory bb1 = robot.trajectoryBuilder(startPose)
+                    .forward(15)
+                    .build();
             // y = forward/back x = left strafe/right strafe, rx = rotation
             y = -gamepad1.left_stick_y;
             x = gamepad1.left_stick_x;
@@ -166,22 +167,21 @@ public class Pp extends LinearOpMode{
                 x=0.6;
             }
             if (Math.abs(rx) > 0.03){
-                robot.BLeft.setPower(rotationScalar * -rx);
+                robot.BLeft.setPower(rotationScalar * rx);
                 robot.BRight.setPower(rotationScalar * -rx);
                 robot.FLeft.setPower(rotationScalar * rx);
                 robot.FRight.setPower(rotationScalar * -rx);
             }
             // if we want to go foward/back AND WE ARE NOT ALREADY AUTOING do a little motor powering
             else if (Math.abs(y) >= Math.abs(x) && Math.abs(y) > 0.03 && !autosliding) {
-                robot.BLeft.setPower(speedScalar * -y/*0.7*/); //-
+                robot.BLeft.setPower(speedScalar * y/*0.7*/); //-
                 robot.BRight.setPower(speedScalar * y/*0.7*/);
                 robot.FLeft.setPower(speedScalar * y/*0.85*/); //-
                 robot.FRight.setPower(speedScalar * y); //0
-
             }
             //if we want to go strafing, set a little moter powerfing for strafing
             else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03){
-                robot.BLeft.setPower(speedScalar * x/* (0.7 * 1.4)the 1.4 is for post-new drivebase, for refrence later*/);
+                robot.BLeft.setPower(speedScalar * -x/* (0.7 * 1.4)the 1.4 is for post-new drivebase, for refrence later*/);
                 robot.BRight.setPower(speedScalar * x /*(0.7 * 1.4)*/);
                 robot.FLeft.setPower(speedScalar * x * 0.9 /*0.85*/);
                 robot.FRight.setPower(speedScalar * 0.9 * -x);
@@ -207,18 +207,17 @@ public class Pp extends LinearOpMode{
                 Hpos += Hspeed ;
             Slidepos = 0.0;
 
-            if (gamepad1.left_bumper) { //goes forward to pick up cone
-                startPose = robot.getPoseEstimate();
+            if (gamepad2.dpad_up) { //goes forward to pick up cone
                 robot.followTrajectory(bb1);
             }
-            /*
-            if (gamepad1.dpad_down) { //goes backwards  to place cone
+
+            if (gamepad2.dpad_down) { //goes backwards  to place cone
                 robot.followTrajectory(ff1);
                 ////////////////////// DON'T UNDO COMMENTED STUFF UNTIL WE KNOW//////////////////////
                 //////////////////////////// F O R     S U R E /////////////////////////////////////
                 ///////////////////////////////WE DON'T NEED THEM////////////////////////////////////
                 //ticksLeft = 15; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP
-            }*/
+            }
             /*if (ticksLeft>0) {
                 autosliding = true;
                 ticksLeft--;

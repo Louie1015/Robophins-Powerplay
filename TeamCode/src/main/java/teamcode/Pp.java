@@ -24,7 +24,7 @@ import teamcode.Components.Lighting;
 import teamcode.Components.MainRobot;
 import teamcode.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
 
-/*class Ppbot{
+class Ppbot{
     public DcMotor BLeft = null;
     public DcMotor BRight = null;
     public DcMotor FLeft = null;
@@ -86,7 +86,7 @@ import teamcode.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlin
     }
 
 
-}*/
+}
 
 @TeleOp (name = "PowerPlaybot", group = "pp")
 

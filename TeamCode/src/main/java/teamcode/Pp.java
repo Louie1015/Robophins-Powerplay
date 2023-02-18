@@ -24,7 +24,7 @@ import teamcode.Components.Lighting;
 import teamcode.Components.MainRobot;
 import teamcode.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
 
-class Ppbot{
+/*class Ppbot{
     public DcMotor BLeft = null;
     public DcMotor BRight = null;
     public DcMotor FLeft = null;
@@ -86,7 +86,7 @@ class Ppbot{
     }
 
 
-}
+}*/
 
 @TeleOp (name = "PowerPlaybot", group = "pp")
 
@@ -130,7 +130,7 @@ public class Pp extends LinearOpMode{
         Trajectory ff1 = robot.trajectoryBuilder(startPose)
                 .back(15)
                 .build();
-        Trajectory bb1 = robot.trajectoryBuilder(ff1.end())
+        Trajectory bb1 = robot.trajectoryBuilder(startPose)
                 .forward(15)
                 .build();
         waitForStart();
@@ -208,6 +208,7 @@ public class Pp extends LinearOpMode{
             Slidepos = 0.0;
 
             if (gamepad1.left_bumper) { //goes forward to pick up cone
+                startPose = robot.getPoseEstimate();
                 robot.followTrajectory(bb1);
             }
             /*

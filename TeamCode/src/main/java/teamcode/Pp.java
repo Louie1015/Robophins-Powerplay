@@ -24,7 +24,7 @@ import teamcode.Components.Lighting;
 import teamcode.Components.MainRobot;
 import teamcode.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
 
-/*class Ppbot{ WE ARE NOT USING PPBOT
+class Ppbot{ //WE ARE NOT USING PPBOT
     public DcMotor BLeft = null;
     public DcMotor BRight = null;
     public DcMotor FLeft = null;
@@ -86,7 +86,7 @@ import teamcode.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlin
     }
 
 
-}*/
+}
 
 @TeleOp (name = "PowerPlaybot", group = "pp")
 
@@ -120,23 +120,24 @@ public class Pp extends LinearOpMode{
 
     public void runOpMode(){
         robot = new MainRobot(hardwareMap, telemetry);
+        double sH = 0;
+        int cringeHoldButton =0;
         //robot.BLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         telemetry.addData("Say", "Hello");
         telemetry.update();
         //pid for auto
-        Pose2d startPose = robot.getPoseEstimate();
         waitForStart();
 
         //while we balling
         while(opModeIsActive()){
-            startPose = robot.getPoseEstimate();
-            Trajectory ff1 = robot.trajectoryBuilder(startPose)
-                    .back(15)
+            Pose2d startPose = robot.getPoseEstimate();
+            Trajectory ff1 = robot.trajectoryBuilder(startPose, Math.toRadians(sH))
+                    .back(13)
                     .build();
-            Trajectory bb1 = robot.trajectoryBuilder(startPose)
-                    .forward(15)
+            Trajectory bb1 = robot.trajectoryBuilder(startPose, Math.toRadians(sH))
+                    .forward(13)
                     .build();
             // y = forward/back x = left strafe/right strafe, rx = rotation
             y = -gamepad1.left_stick_y;
@@ -207,12 +208,15 @@ public class Pp extends LinearOpMode{
                 Hpos += Hspeed ;
             Slidepos = 0.0;
 
-            if (gamepad2.dpad_up) { //goes forward to pick up cone
+            cringeHoldButton--;
+            if (gamepad2.dpad_up && cringeHoldButton <=0) { //goes forward to pick up cone
                 robot.followTrajectory(bb1);
+                cringeHoldButton = 10;
             }
 
-            if (gamepad2.dpad_down) { //goes backwards  to place cone
+            if (gamepad2.dpad_down && cringeHoldButton <= 0) { //goes backwards  to place cone
                 robot.followTrajectory(ff1);
+                cringeHoldButton = 10;
                 ////////////////////// DON'T UNDO COMMENTED STUFF UNTIL WE KNOW//////////////////////
                 //////////////////////////// F O R     S U R E /////////////////////////////////////
                 ///////////////////////////////WE DON'T NEED THEM////////////////////////////////////

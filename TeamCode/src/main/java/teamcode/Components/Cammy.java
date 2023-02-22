@@ -50,7 +50,7 @@ public class Cammy extends OpenCvPipeline {
                 SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
         // Running variable storing the parking position
-        private volatile SleeveDetection.ParkingPosition position = SleeveDetection.ParkingPosition.LEFT;
+        private volatile SleeveDetection.ParkingPosition position = SleeveDetection.ParkingPosition.RIGHT;
 
         @Override
         public Mat processFrame(Mat input) {

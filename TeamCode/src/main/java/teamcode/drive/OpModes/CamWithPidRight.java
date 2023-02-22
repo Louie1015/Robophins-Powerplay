@@ -57,6 +57,12 @@ public class CamWithPidRight extends LinearOpMode{
 
         waitForStart();
         while(opModeIsActive()) {
+            mainRobot.lighting.blinkBlack();
+            mainRobot.grabber.closeGrabber();
+            mainRobot.pause(1000);
+            mainRobot.slides.setSlidesPower(1.0);
+            mainRobot.pause(100);
+            mainRobot.slides.setSlidesPower(0.0);
             int sleeveStage = Cammy.truePath;
             telemetry.addData("Path: ", camlyn.getPosition());
             telemetry.update();
@@ -136,7 +142,7 @@ public class CamWithPidRight extends LinearOpMode{
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstRight.end())
-                .forward(3.25)
+                .forward(4.25)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
@@ -152,7 +158,7 @@ public class CamWithPidRight extends LinearOpMode{
                 .build();
 
         Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
-                .forward(3)
+                .forward(4)
                 .build();
 
         Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
@@ -170,11 +176,7 @@ public class CamWithPidRight extends LinearOpMode{
                 .back(3)
                 .build();
 
-        mainRobot.grabber.closeGrabber();
-        mainRobot.pause(500);
-        mainRobot.slides.setSlidesPower(1.0);
-        mainRobot.pause(100);
-        mainRobot.slides.setSlidesPower(0.0);
+
         mainRobot.followTrajectory(ff1);
         mainRobot.followTrajectory(firstLeft); // GO RIGHT
         mainRobot.followTrajectory(firstForward); // GO FORWARD

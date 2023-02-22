@@ -24,6 +24,7 @@ public class Lighting {
     public void blinkMagenta() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET); }
 
     public void blinkCyan() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN); }
+    public void blinkBlack() { ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK); }
 
 
 }

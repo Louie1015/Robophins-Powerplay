@@ -130,7 +130,7 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory firstRight = mainRobot.trajectoryBuilder(ff1.end())
-                .strafeRight(21.5)
+                .strafeRight(26.5)
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
@@ -142,11 +142,11 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
-                .forward(3.5)
+                .forward(2)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
-                .back(4.4)
+                .back(2.9)
                 .build();
 
         TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
@@ -177,7 +177,7 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         mainRobot.grabber.closeGrabber();
-        mainRobot.pause(500);
+        mainRobot.pause(600);
         mainRobot.slides.setSlidesPower(1.0);
         mainRobot.pause(100);
 

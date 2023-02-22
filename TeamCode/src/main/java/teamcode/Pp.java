@@ -101,7 +101,7 @@ public class Pp extends LinearOpMode{
     final double Slidespeed = 1.0;
     final double Hspeed = 1.0;
     final double rotationScalar = 0.35;
-    final double speedScalar = 0.5;
+    final double speedScalar = 0.75;
     double drivespeed = 0.2;
     boolean closed = true;
 
@@ -132,17 +132,18 @@ public class Pp extends LinearOpMode{
 
         //while we balling
         while(opModeIsActive()){
-            Pose2d startPose = robot.getPoseEstimate();
+            /*Pose2d startPose = robot.getPoseEstimate(); UNCOMMENT IF U WANT PID BACK, BUT U WILL HAVE MORE INPUT LAG AND SLOWER TICKRATE
             Trajectory ff1 = robot.trajectoryBuilder(startPose, Math.toRadians(sH))
                     .back(13)
                     .build();
             Trajectory bb1 = robot.trajectoryBuilder(startPose, Math.toRadians(sH))
                     .forward(13)
-                    .build();
+                    .build();*/
             // y = forward/back x = left strafe/right strafe, rx = rotation
             y = -gamepad1.left_stick_y;
             x = gamepad1.left_stick_x;
             rx = gamepad1.right_stick_x;
+            rx += gamepad2.right_stick_x / 2;
             // if l/r dpad, do a little rotating
             /*if (gamepad1.dpad_left) {
                 rx=-1;
@@ -163,9 +164,9 @@ public class Pp extends LinearOpMode{
             } else if (gamepad1.dpad_down) {
                 y=-0.41;
             } else if (gamepad1.dpad_left) {
-                x=-0.6;
+                x=-0.6 * 0.666;
             } else if (gamepad1.dpad_right) {
-                x=0.6;
+                x=0.6 * 0.666;
             }
             if (Math.abs(rx) > 0.03){
                 robot.BLeft.setPower(rotationScalar * rx);
@@ -175,10 +176,10 @@ public class Pp extends LinearOpMode{
             }
             // if we want to go foward/back AND WE ARE NOT ALREADY AUTOING do a little motor powering
             else if (Math.abs(y) >= Math.abs(x) && Math.abs(y) > 0.03 && !autosliding) {
-                robot.BLeft.setPower(speedScalar * y/*0.7*/); //-
-                robot.BRight.setPower(speedScalar * y/*0.7*/);
-                robot.FLeft.setPower(speedScalar * y/*0.85*/); //-
-                robot.FRight.setPower(speedScalar * y); //0
+                robot.BLeft.setPower(speedScalar * y/*0.7*/ * 0.666); //-
+                robot.BRight.setPower(speedScalar * y/*0.7*/ * 0.666);
+                robot.FLeft.setPower(speedScalar * y/*0.85*/ * 0.666); //-
+                robot.FRight.setPower(speedScalar * y * 0.666); //0
             }
             //if we want to go strafing, set a little moter powerfing for strafing
             else if (Math.abs(x) > (Math.abs(y)) && Math.abs(x) > 0.03){
@@ -194,10 +195,10 @@ public class Pp extends LinearOpMode{
                 robot.FRight.setPower(0);
             }
             //uppy downy. <- NOT DOWNY madge <- YES DOWNY WE HAVE RETRACTION NOW
-
+            //impulse pog
             Hpos = 0.0;
             if (robot.HorizontalTouch.isPressed() && !wasPressedLastTick) { // stop hslide spool momentum
-                Hpos -= 0.05 ;
+                Hpos += 0.10 ;
                 wasPressedLastTick = true;
             } else if (!robot.HorizontalTouch.isPressed()) {
                 wasPressedLastTick = false;
@@ -208,7 +209,7 @@ public class Pp extends LinearOpMode{
                 Hpos += Hspeed ;
             Slidepos = 0.0;
 
-            cringeHoldButton--;
+            /*cringeHoldButton--; UNCOMMENT FOR PID BACK
             if (gamepad2.dpad_up && cringeHoldButton <=0) { //goes forward to pick up cone
                 robot.followTrajectory(bb1);
                 cringeHoldButton = 10;
@@ -217,41 +218,19 @@ public class Pp extends LinearOpMode{
             if (gamepad2.dpad_down && cringeHoldButton <= 0) { //goes backwards  to place cone
                 robot.followTrajectory(ff1);
                 cringeHoldButton = 10;
-                ////////////////////// DON'T UNDO COMMENTED STUFF UNTIL WE KNOW//////////////////////
-                //////////////////////////// F O R     S U R E /////////////////////////////////////
-                ///////////////////////////////WE DON'T NEED THEM////////////////////////////////////
-                //ticksLeft = 15; //THIS VALUE IS HOW FAR THE SLIDES WILL GO UP
-            }
-            /*if (ticksLeft>0) {
-                autosliding = true;
-                ticksLeft--;
-                if (ticksLeft ==0) {
-                    nextPhase = true;
-                }
-            }
-            holdie_cow = false;
-            if (nextPhase) { // press left bumper to initate auto ascend
-                ticksLeft2 = 25; //THIS VALUE IS HOW LONG THE SLIDES WILL STAY STILL
-                nextPhase = false;
-            }
-            if (ticksLeft2>0) {
-                holdie_cow = true;
-                ticksLeft2--;
-                if (ticksLeft2==0) {
-                    thirdphase = true;
-                }
-            }
-            if (thirdphase) {
-
             }*/
 
-            if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0 || autosliding) // uppy
+
+            if (Math.abs(gamepad1.right_trigger) > 0.0 || Math.abs(gamepad2.right_trigger) > 0.0 ) // uppy
                 Slidepos += Slidespeed / 1.1;
-            if (gamepad1.right_bumper || gamepad2.right_bumper || holdie_cow) { // stopper
+            if (gamepad1.right_bumper || gamepad2.right_bumper ) { // stopper
                 Slidepos += Slidespeed / 8;
             }
             if (Math.abs(gamepad1.left_trigger) > 0.0 || Math.abs(gamepad2.left_trigger) > 0.0) {// downy
-                Slidepos -= Slidespeed / 3;
+                Slidepos -= Slidespeed / 1.5;
+            }
+            if (gamepad1.left_bumper || gamepad2.left_bumper) {
+                Slidepos -= Slidespeed / 6;
             }
             //open close :)
             if (gamepad1.x || gamepad2.x) {

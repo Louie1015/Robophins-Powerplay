@@ -127,26 +127,26 @@ public class CamWithPidRight extends LinearOpMode{
         Pose2d startPose = new Pose2d(-34, 70, Math.toRadians(-90));
         mainRobot.setPoseEstimate(startPose);
         Trajectory ff1 = mainRobot.trajectoryBuilder(startPose)
-                .forward(1)
+                .forward(2)
                 .build();
         Trajectory firstLeft = mainRobot.trajectoryBuilder(ff1.end())
                 .strafeLeft(21.5)
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstLeft.end())
-                .forward(45.5)
+                .forward(44.5)
                 .build();
 
         Trajectory firstRight = mainRobot.trajectoryBuilder(firstForward.end())
-                .strafeRight(10)
+                .strafeRight(10.5)
                 .build();
 
         Trajectory creep = mainRobot.trajectoryBuilder(firstRight.end())
-                .forward(4.25)
+                .forward(3.25)
                 .build();
 
         Trajectory backcreep = mainRobot.trajectoryBuilder(creep.end())
-                .back(4.25)
+                .back(3.25)
                 .build();
 
         TrajectorySequence turn1 = mainRobot.trajectorySequenceBuilder(backcreep.end())
@@ -162,7 +162,7 @@ public class CamWithPidRight extends LinearOpMode{
                 .build();
 
         Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
-                .back(32)
+                .back(32.7)
                 .build();
 
         TrajectorySequence turn2 = mainRobot.trajectorySequenceBuilder(backcycle.end())

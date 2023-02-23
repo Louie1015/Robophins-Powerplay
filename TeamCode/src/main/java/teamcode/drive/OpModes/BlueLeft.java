@@ -27,7 +27,7 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.setPoseEstimate(startPose);
 
         Trajectory firstRight = mainRobot.trajectoryBuilder(startPose)
-                .strafeRight(21.5)
+                .lineToLinearHeading(new Pose2d(startPose.getX()+12, startPose.getY() +3.25, Math.toRadians(-90)))
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
@@ -74,14 +74,14 @@ public class BlueLeft extends LinearOpMode{
                 .build();
 
         waitForStart();
-        mainRobot.grabber.closeGrabber();
+        /*mainRobot.grabber.closeGrabber();
         mainRobot.grabber.closeGrabber();
         mainRobot.pause(600);
         mainRobot.slides.setSlidesPower(1.0);
         mainRobot.pause(300);
-        mainRobot.slides.setSlidesPower(0.0);
+        mainRobot.slides.setSlidesPower(0.0);*/
         mainRobot.followTrajectory(firstRight); // GO RIGHT
-        mainRobot.followTrajectory(firstForward); // GO FORWARD
+        /*mainRobot.followTrajectory(firstForward); // GO FORWARD
         mainRobot.followTrajectory(firstLeft); // GO LEFT
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
         mainRobot.pause(2000); // TIME TO GET TO TOP
@@ -97,7 +97,7 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.pause(1000);*/
    //     mainRobot.grabber.closeGrabber();// CLOSE
    //     mainRobot.pause(300);
-        mainRobot.followTrajectorySequence(turn1); // turn ccw
+        /*mainRobot.followTrajectorySequence(turn1); // turn ccw
         mainRobot.slides.setSlidesPower(1.0); // slide up
         mainRobot.pause(220);
         mainRobot.slides.setSlidesPower(0.05); // hold up
@@ -117,7 +117,7 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.grabber.openGrabber(); // drop cone
         mainRobot.pause(200);
         mainRobot.slides.setSlidesPower(-0.3); // drop
-        mainRobot.followTrajectory(cyclebackcreep); // get ready to park
+        mainRobot.followTrajectory(cyclebackcreep); // get ready to park*/
 
 
 

@@ -214,7 +214,6 @@ public class CamWithPidRight extends LinearOpMode{
         mainRobot.pause(2000);
         mainRobot.slides.setSlidesPower(0.05);
         mainRobot.followTrajectory(cyclecreep2); //creep
-        mainRobot.pause(100);
         mainRobot.grabber.openGrabber(); // drop cone
         mainRobot.pause(200);
         mainRobot.slides.setSlidesPower(-1.0); // drop

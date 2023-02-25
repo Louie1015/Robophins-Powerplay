@@ -23,11 +23,11 @@ public class BlueLeft extends LinearOpMode{
     @Override
     public void runOpMode() {
         mainRobot = new MainRobot(hardwareMap, telemetry);
-        Pose2d startPose = new Pose2d(-34, 70, Math.toRadians(0));
+        Pose2d startPose = new Pose2d(-34, 70, Math.toRadians(-180));
         mainRobot.setPoseEstimate(startPose);
 
         Trajectory firstRight = mainRobot.trajectoryBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(startPose.getX()-38, startPose.getY()-3.0, Math.toRadians(-87)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()+36, startPose.getY()-6.0, Math.toRadians(-93)))
                 .build();
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(firstRight.end())
@@ -80,9 +80,8 @@ public class BlueLeft extends LinearOpMode{
         mainRobot.slides.setSlidesPower(1.0);
         mainRobot.pause(300);
         mainRobot.slides.setSlidesPower(0.0);*/
-        mainRobot.slides.setSlidesPower(0.75);
         mainRobot.followTrajectory(firstRight); // GO RIGHT
-        mainRobot.slides.setSlidesPower(0.05);
+
         /*mainRobot.followTrajectory(firstForward); // GO FORWARD
         mainRobot.followTrajectory(firstLeft); // GO LEFT
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP

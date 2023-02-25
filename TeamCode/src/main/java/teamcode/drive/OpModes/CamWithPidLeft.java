@@ -100,7 +100,7 @@ public class CamWithPidLeft extends LinearOpMode{
         drop1();
         //park into left sector (Yellow)
         Trajectory yellowTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(37)
+                .strafeLeft(37.5)
                 .build();
         mainRobot.slides.setSlidesPower(0.0);
         mainRobot.followTrajectory(yellowTraj1);
@@ -131,7 +131,7 @@ public class CamWithPidLeft extends LinearOpMode{
         mainRobot.setPoseEstimate(startPose);
         Trajectory ff1 = mainRobot.trajectoryBuilder(startPose)
                 //.forward(1)
-                .lineToLinearHeading(new Pose2d(startPose.getX()-26.5, startPose.getY()-3, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()-26.5, startPose.getY()-2.5, Math.toRadians(-90)))
                 .build();
         startPose = ff1.end();
 
@@ -146,7 +146,7 @@ public class CamWithPidLeft extends LinearOpMode{
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
                 //.strafeLeft(14.5)
-                .lineToLinearHeading(new Pose2d(startPose.getX()+15, startPose.getY()-4, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()+14.25, startPose.getY()-4.25, Math.toRadians(-90)))
                 .build();
         startPose = firstLeft.end();
         /*Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
@@ -155,7 +155,7 @@ public class CamWithPidLeft extends LinearOpMode{
         startPose = creep.end();*/
         Trajectory backcreep = mainRobot.trajectoryBuilder(startPose)
                 //.back(3)
-                .lineToLinearHeading(new Pose2d(startPose.getX()+11.5, startPose.getY()+3.75, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()+12.25, startPose.getY()+4, Math.toRadians(-90)))
                 .build();
         /*Trajectory backstrafe = mainRobot.trajectoryBuilder(backcreep.end())
                 .strafeLeft(10)
@@ -166,16 +166,16 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();
 
         Trajectory cycleforward = mainRobot.trajectoryBuilder(turn1.end())
-                .forward(22 )
+                .forward(23.5)
                 .build();
-
-        Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
+        startPose = cycleforward.end();
+        /*Trajectory cyclecreep = mainRobot.trajectoryBuilder(cycleforward.end())
                 .forward(2.75)
                 .build();
-        startPose = cyclecreep.end();
-        Trajectory backcycle = mainRobot.trajectoryBuilder(cyclecreep.end())
+        startPose = cyclecreep.end();*/
+        Trajectory backcycle = mainRobot.trajectoryBuilder(startPose)
                 //.back(32.5)
-                .lineToLinearHeading(new Pose2d(startPose.getX()-38, startPose.getY()-3.0, Math.toRadians(-87)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()-39, startPose.getY()-3.5, Math.toRadians(-87)))
                 .build();
         startPose=(new Pose2d(backcycle.end().getX(),backcycle.end().getY(), Math.toRadians(-90)));
 
@@ -186,6 +186,30 @@ public class CamWithPidLeft extends LinearOpMode{
         /*Trajectory cyclecreep2 = mainRobot.trajectoryBuilder(startPose)
                 .forward(2)
                 .build();*/
+        //3RD CONE COMMENT THIS OUT IF IT DOESNT WORK
+        /*Trajectory backcreep2 = mainRobot.trajectoryBuilder(startPose)
+                //.back(3)
+                .lineToLinearHeading(new Pose2d(startPose.getX()+11.5, startPose.getY()+3.75, Math.toRadians(-90)))
+                .build();
+        startPose = backcreep2.end();
+        TrajectorySequence turnThirdCone = mainRobot.trajectorySequenceBuilder(startPose)
+                .turn(Math.toRadians(90))
+                .build();
+        Trajectory cycleforwardThirdCone = mainRobot.trajectoryBuilder(turnThirdCone.end())
+                .forward(24)
+                .build();
+        startPose = cycleforwardThirdCone.end();
+        Trajectory cyclecreepThirdCone = mainRobot.trajectoryBuilder(cycleforwardThirdCone.end())
+                .forward(2.75)
+                .build();
+        startPose = cyclecreep.end();
+        Trajectory backcycleThirdCone = mainRobot.trajectoryBuilder(startPose)
+                //.back(32.5)
+                .lineToLinearHeading(new Pose2d(startPose.getX()-38, startPose.getY()-3.0, Math.toRadians(-87)))
+                .build();
+        startPose=(new Pose2d(backcycleThirdCone.end().getX(),backcycleThirdCone.end().getY(), Math.toRadians(-90)));*/
+
+
         Trajectory cyclebackcreep = mainRobot.trajectoryBuilder(startPose)
                 .back(2)
                 .build();
@@ -194,16 +218,18 @@ public class CamWithPidLeft extends LinearOpMode{
         mainRobot.followTrajectory(firstForward); // GO FORWARD
         //mainRobot.followTrajectory(firstLeft); // GO LEFT
         mainRobot.slides.setSlidesPower(1.0); // VERTICAL SLIDE UP
-        mainRobot.pause(500);
+        mainRobot.pause(600);
         mainRobot.followTrajectory(firstLeft); // GO LEFT AND CREEP
         mainRobot.pause(300); // TIME TO GET TO TOP
         mainRobot.slides.setSlidesPower(1.0/6.0);
         //mainRobot.followTrajectory(creep); // CREEP FORWARDS
         mainRobot.grabber.openGrabber(); //DROP CONE
         mainRobot.pause(200);
-        mainRobot.followTrajectory(backcreep); // go backwards so you can close
-
         mainRobot.slides.setSlidesPower(-1.0); // GO DOWN WHILE OPEN
+        mainRobot.followTrajectory(backcreep); // go backwards so you can close
+        mainRobot.pause(200);
+        mainRobot.slides.setSlidesPower(0.0); // STOP
+
         //mainRobot.followTrajectory(backstrafe);
         //mainRobot.pause(400);
         /*mainRobot.slides.setSlidesPower(-0.7);//MAKE SURE U ACTUALLY GO DOWN
@@ -214,10 +240,10 @@ public class CamWithPidLeft extends LinearOpMode{
         //     mainRobot.pause(300);
         mainRobot.followTrajectorySequence(turn1); // turn ccw
         mainRobot.slides.setSlidesPower(1.0); // slide up
-        mainRobot.pause(220);
+        mainRobot.pause(200);
         mainRobot.slides.setSlidesPower(0.05); // hold up
         mainRobot.followTrajectory(cycleforward); // go to stack
-        mainRobot.followTrajectory(cyclecreep);// go forward while open
+        //mainRobot.followTrajectory(cyclecreep);// go forward while open
         mainRobot.grabber.closeGrabber();// grab it
         mainRobot.pause(400);
         mainRobot.slides.setSlidesPower(1.0); // take it off
@@ -231,6 +257,31 @@ public class CamWithPidLeft extends LinearOpMode{
         //mainRobot.followTrajectory(cyclecreep2); //creep
         mainRobot.grabber.openGrabber(); // drop cone
         mainRobot.pause(200);
+        /*3RD CONE CODE
+        mainRobot.slides.setSlidesPower(-1.0); // GO DOWN WHILE OPEN
+        mainRobot.followTrajectory(backcreep2);
+
+        mainRobot.followTrajectorySequence(turnThirdCone);
+        mainRobot.slides.setSlidesPower(1.0); // slide up
+        mainRobot.pause(220);
+        mainRobot.slides.setSlidesPower(0.05); // hold up
+        mainRobot.followTrajectory(cycleforwardThirdCone); // go to stack
+        //mainRobot.followTrajectory(cyclecreepThirdCone);// go forward while open
+        mainRobot.grabber.closeGrabber();// grab it
+        mainRobot.pause(400);
+        mainRobot.slides.setSlidesPower(1.0); // take it off
+        mainRobot.pause(400);
+        mainRobot.slides.setSlidesPower(0.75); //up while drifting
+        mainRobot.followTrajectory(backcycleThirdCone); //go back to pole
+        mainRobot.slides.setSlidesPower(0.05);
+        mainRobot.grabber.openGrabber(); // drop cone
+        mainRobot.pause(200);
+
+
+
+
+
+        //3RD CONE CODE END*/
         mainRobot.slides.setSlidesPower(-1.0); // drop
         mainRobot.followTrajectory(cyclebackcreep); // get ready to park
         tempPose = cyclebackcreep.end();

@@ -63,8 +63,8 @@ public class CamWithPidLeft extends LinearOpMode{
             mainRobot.grabber.closeGrabber();
             mainRobot.pause(1200);
             mainRobot.slides.setSlidesPower(1.0);
-            mainRobot.pause(100);
-            mainRobot.slides.setSlidesPower(0.0);
+            mainRobot.pause(150);
+            mainRobot.slides.setSlidesPower(0.05);
             int sleeveStage = Cammy.truePath;
             telemetry.addData("Path: ", camlyn.getPosition());
             telemetry.update();
@@ -100,7 +100,7 @@ public class CamWithPidLeft extends LinearOpMode{
         drop1();
         //park into left sector (Yellow)
         Trajectory yellowTraj1 = mainRobot.trajectoryBuilder(tempPose)
-                .strafeLeft(37.5)
+                .strafeLeft(38.5)
                 .build();
         mainRobot.slides.setSlidesPower(0.0);
         mainRobot.followTrajectory(yellowTraj1);
@@ -140,13 +140,13 @@ public class CamWithPidLeft extends LinearOpMode{
                 .build();*/
 
         Trajectory firstForward = mainRobot.trajectoryBuilder(startPose)
-                .forward(41)
+                .forward(42.5)
                 .build();
         startPose = firstForward.end();
 
         Trajectory firstLeft = mainRobot.trajectoryBuilder(firstForward.end())
                 //.strafeLeft(14.5)
-                .lineToLinearHeading(new Pose2d(startPose.getX()+14.25, startPose.getY()-4.25, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()+13.75, startPose.getY()-4.25, Math.toRadians(-90)))
                 .build();
         startPose = firstLeft.end();
         /*Trajectory creep = mainRobot.trajectoryBuilder(firstLeft.end())
@@ -155,7 +155,7 @@ public class CamWithPidLeft extends LinearOpMode{
         startPose = creep.end();*/
         Trajectory backcreep = mainRobot.trajectoryBuilder(startPose)
                 //.back(3)
-                .lineToLinearHeading(new Pose2d(startPose.getX()+12.25, startPose.getY()+4, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()+12.75, startPose.getY()+1.5, Math.toRadians(-90)))
                 .build();
         /*Trajectory backstrafe = mainRobot.trajectoryBuilder(backcreep.end())
                 .strafeLeft(10)
